@@ -8,7 +8,6 @@ echo "🚀 Starting GitHub Actions Runner for Raspberry Pi..."
 # Validate required environment variables
 echo "🔍 Checking environment variables..."
 echo "   GH_OWNER: ${GH_OWNER:-'❌ Not configured'}"
-echo "   GH_REPOSITORY: ${GH_REPOSITORY:-'❌ Not configured'}"
 echo "   RUNNER_NAME: ${RUNNER_NAME:-'❌ Not configured'}"
 
 # DEBUG: Check token without printing full contents
@@ -35,7 +34,6 @@ fi
 
 # Trim possible spaces or odd characters from variables
 GH_OWNER=$(echo "$GH_OWNER" | tr -d '[:space:]')
-GH_REPOSITORY=$(echo "$GH_REPOSITORY" | tr -d '[:space:]')
 GH_TOKEN=$(echo "$GH_TOKEN" | tr -d '[:space:]')
 
 # Configure unique runner name
@@ -43,7 +41,6 @@ RUNNER_NAME="${RUNNER_NAME:-"raspi-runner-$(date +%s)"}"
 
 echo "📋 Final configuration:"
 echo "   Owner: '$GH_OWNER'"
-echo "   Repository: '$GH_REPOSITORY'"
 echo "   Runner Name: '$RUNNER_NAME'"
 
 # Function to obtain registration token - all debug goes to STDERR
