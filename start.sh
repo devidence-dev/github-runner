@@ -239,18 +239,23 @@ echo "📏 Final token length: ${#REG_TOKEN} characters"
 # Configure the runner
 echo "⚙️  Configuring runner with official GitHub Actions Runner..."
 echo "🔗 URL: https://github.com/${GH_OWNER}"
-echo "🏷️  Labels: raspberry-pi,arm64,docker"
+
+if [[ -n "$RUNNER_GROUP" ]]; then
+    echo "� Runner Group: ${RUNNER_GROUP}"
+fi
+
+# Build config.sh command with optional runner group
+CONFIG_CMD="timeout 300 ./config.sh --unattended --replace --url https://github.com/${GH_OWNER} --token ${REG_TOKEN} --name ${RUNNER_NAME}"
+
+if [[ -n "$RUNNER_GROUP" ]]; then
+    CONFIG_CMD="$CONFIG_CMD --runnergroup ${RUNNER_GROUP}"
+fi
+
+CONFIG_CMD="$CONFIG_CMD --work _work"
 
 # Run configuration with timeout and capture full output
 echo "🔧 Running config.sh..."
-timeout 300 ./config.sh \
-    --unattended \
-    --replace \
-    --url "https://github.com/${GH_OWNER}" \
-    --token "${REG_TOKEN}" \
-    --name "${RUNNER_NAME}" \
-    --labels "raspberry-pi,arm64,docker" \
-    --work "_work" 2>&1 | tee /tmp/config.log
+eval "$CONFIG_CMD" 2>&1 | tee /tmp/config.log
 
 config_exit_code=${PIPESTATUS[0]}
 
