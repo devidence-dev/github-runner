@@ -1,47 +1,57 @@
-# GitHub Actions Self-Hosted Runner
+# 🏃 GitHub Actions Self-Hosted Runner (Organization-Level)
 
-This repository packages a containerized GitHub Actions self-hosted runner and provides orchestration and startup logic to register the runner with a repository.
+This repository packages a containerized GitHub Actions self-hosted runner that registers at the **organization level**, making it available to all repositories within your GitHub organization.
 
-Purpose
-- Provide a Docker image and a docker-compose orchestration to run a self-hosted GitHub Actions runner.
+## 🎯 Purpose
+- Provide a Docker image and docker-compose orchestration to run a self-hosted GitHub Actions runner
+- Register the runner at **organization level** (not tied to a specific repository)
+- Allow any repository in your organization to use this runner
 
-Primary files
-- `Dockerfile` — image definition
-- `docker-compose.yml` — orchestration for running the container
-- `start.sh` — container entrypoint that handles registration and runner lifecycle
-- `.env.example` — example environment variables
+## 📦 Primary files
+- `Dockerfile` — Image definition with configurable runner version (ARG RUNNER_VERSION)
+- `docker-compose.yml` — Orchestration for running the container
+- `start.sh` — Container entrypoint that handles registration at org-level and runner lifecycle
+- `.env.example` — Example environment variables
+- `.gitignore` — Prevents committing secrets and build artifacts
 
-Quick start
-1. Copy the example env and edit values:
+## 🚀 Quick start
+
+### 1️⃣ Copy and configure environment file
 
 ```bash
 cp .env.example .env
 ```
 
-2. Edit `.env` and set required variables (at minimum):
-- `GH_OWNER` — organization or username
-- `GITHUB_TOKEN` — Personal Access Token with `repo` scope
+### 2️⃣ Edit `.env` and set **required** variables:
 
-### ✅ Latest env variables (present in `.env.example`)
+- `GH_OWNER` — Your GitHub **organization name** (required)
+- `GH_TOKEN` — Personal Access Token with **admin:org** scope (required for org-level runners)
 
-- `GH_OWNER` — organization or username (required)
-- `GH_REPOSITORY` — repository name (optional; used by start script to form URL)
-- `GH_TOKEN` — Personal Access Token with `repo` scope (required)
-- `RUNNER_NAME` — friendly name for the runner (optional)
-- `RUNNER_DATA` — path to persist runner data (default: `./runner-data`)
-- `REGISTRATION_TOKEN` — optional manual registration token (if automatic retrieval fails)
-- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — optional; for notifications
+> ⚠️ **Important**: For organization-level runners, your token needs the `admin:org` scope, not just `repo`.
 
-3. Example `.env` quick template (edit values):
+### ✅ Environment variables
+
+**Required:**
+- `GH_OWNER` — GitHub organization name (required)
+- `GH_TOKEN` — Personal Access Token with `admin:org` scope (required)
+
+**Optional:**
+- `RUNNER_NAME` — Friendly name for the runner (default: `raspi-runner-<timestamp>`)
+- `RUNNER_DATA` — Path to persist runner data (default: `./runner-data`)
+- `REGISTRATION_TOKEN` — Manual registration token (if automatic retrieval fails)
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — For optional notifications
+
+> 📝 **Note**: `GH_REPOSITORY` is **not needed** for organization-level runners
+
+### 3️⃣ Example `.env` configuration:
 
 ```bash
-# GitHub configuration
-GH_OWNER=your-organization-or-username
-GH_REPOSITORY=your-repo-name
-GH_TOKEN=ghp_xxx_your_token_here
+# GitHub organization configuration
+GH_OWNER=your-organization-name
+GH_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxx
 
 # Runner configuration
-RUNNER_NAME=raspi-runner-01
+RUNNER_NAME=org-runner-01
 RUNNER_DATA=./runner-data
 
 # Optional: manual registration token
@@ -52,24 +62,49 @@ RUNNER_DATA=./runner-data
 # TELEGRAM_CHAT_ID=your_chat_id_here
 ```
 
-3. Build and run with docker-compose:
+### 4️⃣ Build and run
 
 ```bash
+# Build and start the runner
 docker-compose up -d
 
-# to follow logs
+# Follow logs to verify registration
 docker-compose logs -f github-runner
 ```
 
-Behavior notes
-- `start.sh` will try to obtain a registration token from the GitHub API using `GITHUB_TOKEN` and register the runner automatically. If automatic registration fails or you prefer manual control, set `REGISTRATION_TOKEN` in `.env`.
-- Keep secrets out of the repository. Do not commit `.env` or tokens.
+You should see:
+```
+✅ Runner configured successfully
+🏃 Starting runner...
+```
 
-Want to remove more files?
-If you want me to delete any files or further prune the repository, tell me which files to remove and I'll proceed after your confirmation.
+## 📋 Behavior notes
 
-Troubleshooting quick tips
-- If the runner doesn't register, check `docker-compose logs -f github-runner` and confirm `GH_TOKEN` has `repo` scope.
-- If you get permission errors with Docker socket, ensure the host user can access Docker or run the container with appropriate privileges.
+- The runner registers at **organization level** using the GitHub API endpoint `/orgs/{org}/actions/runners/registration-token`
+- `start.sh` automatically obtains a registration token using `GH_TOKEN`
+- The runner will be available to **all repositories** in your organization
+- If automatic token retrieval fails, you can set `REGISTRATION_TOKEN` manually in `.env`
+- Runner version can be customized at build time: `docker build --build-arg RUNNER_VERSION=2.329.0 .`
 
-Made changes to `.env.example` and `docker-compose.yml` are reflected here. If you want different default paths, labels, or remove workspace-specific comments, I can update them.
+## 🔒 Security
+
+- **Never commit** `.env` or tokens to the repository (`.gitignore` prevents this)
+- Use a token with minimal required scope: `admin:org` for organization runners
+- The runner runs in an isolated Docker container with controlled access
+
+## 🔧 Troubleshooting
+
+### Runner doesn't register
+- Check logs: `docker-compose logs -f github-runner`
+- Verify `GH_TOKEN` has `admin:org` scope (not just `repo`)
+- Confirm `GH_OWNER` is the **organization name**, not a username
+- Check that your organization allows self-hosted runners
+
+### Docker permission errors
+- Ensure the host user can access Docker socket
+- Verify the container runs with appropriate privileges (privileged: true in docker-compose.yml)
+
+### Token issues
+- Generate a new token at: GitHub → Settings → Developer settings → Personal access tokens
+- Required scope: `admin:org` for organization-level runners
+- Token must belong to a user with admin access to the organization

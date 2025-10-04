@@ -27,9 +27,9 @@ else
     echo "   REGISTRATION_TOKEN: ⚪ Not configured (will be obtained automatically)"
 fi
 
-if [[ -z "$GH_OWNER" || -z "$GH_REPOSITORY" || -z "$GH_TOKEN" ]]; then
+if [[ -z "$GH_OWNER" || -z "$GH_TOKEN" ]]; then
     echo "❌ Error: Required environment variables are not configured"
-    echo "💡 Check that the .env file exists and contains the correct variables"
+    echo "💡 Check that the .env file has GH_OWNER and GH_TOKEN"
     exit 1
 fi
 
@@ -51,7 +51,7 @@ get_registration_token() {
     local response token error_message http_code body
 
     echo "🌐 Making request to GitHub API..." >&2
-    local api_url="https://api.github.com/repos/${GH_OWNER}/${GH_REPOSITORY}/actions/runners/registration-token"
+    local api_url="https://api.github.com/orgs/${GH_OWNER}/actions/runners/registration-token"
     echo "🔗 URL: $api_url" >&2
     echo "⏱️  Starting curl request..." >&2
 
@@ -196,31 +196,7 @@ fi
 
 echo "✅ Connected as user: $username"
 
-# Verify access to the repository
-echo "📁 Checking access to repository ${GH_OWNER}/${GH_REPOSITORY}..."
-repo_response=$(curl -s --connect-timeout 10 --max-time 30     -H "Authorization: token ${GH_TOKEN}"     -H "Accept: application/vnd.github.v3+json"     "https://api.github.com/repos/${GH_OWNER}/${GH_REPOSITORY}" 2>&1)
-
-if [[ $? -ne 0 ]]; then
-    echo "❌ Error: Cannot access the repository"
-    echo "📋 Error: $repo_response"
-    exit 1
-fi
-
-# Verify that the repo exists and is accessible
-if command -v jq >/dev/null 2>&1; then
-    repo_name=$(echo "$repo_response" | jq -r '.name // empty' 2>/dev/null)
-else
-    repo_name=$(echo "$repo_response" | grep -o '"name":"[^"]*"' | cut -d'"' -f4)
-fi
-
-if [[ -z "$repo_name" ]]; then
-    echo "❌ Error: Repository not found or access denied"
-    echo "📋 Repository response:"
-    echo "$repo_response"
-    exit 1
-fi
-
-echo "✅ Repository accessible: $repo_name"
+# Repository validation removed - not needed for organization-level runners
 
 # Obtain registration token
 if [[ -n "$REGISTRATION_TOKEN" ]]; then
@@ -265,11 +241,11 @@ echo "📏 Final token length: ${#REG_TOKEN} characters"
 
 # Configure the runner
 echo "⚙️  Configuring runner with official GitHub Actions Runner..."
-echo "🔗 URL: https://github.com/${GH_OWNER}/${GH_REPOSITORY}"
+echo "🔗 URL: https://github.com/${GH_OWNER}"
 echo "🏷️  Labels: raspberry-pi,arm64,docker"
 
 # Run configuration with timeout
-timeout 300 ./config.sh     --unattended     --url "https://github.com/${GH_OWNER}/${GH_REPOSITORY}"     --token "${REG_TOKEN}"     --name "${RUNNER_NAME}"     --labels "raspberry-pi,arm64,docker"     --work "_work"
+timeout 300 ./config.sh     --unattended     --url "https://github.com/${GH_OWNER}"     --token "${REG_TOKEN}"     --name "${RUNNER_NAME}"     --labels "raspberry-pi,arm64,docker"     --work "_work"
 
 config_exit_code=$?
 

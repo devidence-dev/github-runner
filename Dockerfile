@@ -3,7 +3,11 @@ FROM debian:13.1-slim
 # Avoid interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies and .NET Core 6.0
+# Runner version argument with default
+# https://github.com/actions/runner/releases
+ARG RUNNER_VERSION=2.328.0
+
+# Install minimal dependencies for runner + Docker-in-Docker
 RUN apt-get update && apt-get install -y \
     curl \
     tar \
@@ -14,13 +18,6 @@ RUN apt-get update && apt-get install -y \
     docker-compose \
     sudo \
     ca-certificates \
-    libc6 \
-    libgcc-s1 \
-    libgssapi-krb5-2 \
-    libicu-dev \
-    libssl3 \
-    libstdc++6 \
-    zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a 'runner' user with sudo and docker permissions
@@ -31,8 +28,7 @@ RUN useradd -m -s /bin/bash runner && \
 
 # Download GitHub Actions Runner for ARM64 (Raspberry Pi) - following official instructions
 WORKDIR /home/runner
-RUN RUNNER_VERSION="2.328.0" && \
-    curl -O -L "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz" && \
+RUN curl -O -L "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz" && \
     tar xzf ./actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz && \
     rm actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz && \
     # Install additional runner dependencies
