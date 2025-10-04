@@ -12,6 +12,7 @@ services:
       - RUNNER_NAME=${RUNNER_NAME:-runner-${HOSTNAME}}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOST_REPOS_PATH:-~/repositories}:/home/runner/repositories
       - ${RUNNER_DATA:-./runner-data}:/home/runner/_work
     restart: unless-stopped
     networks:
