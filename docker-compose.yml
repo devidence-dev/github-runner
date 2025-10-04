@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  github-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: github-actions-runner
+    env_file:
+      - .env
+    environment:
+      - GH_OWNER=${GH_OWNER}
+      - GH_REPOSITORY=${GH_REPOSITORY}
+      - GH_TOKEN=${GITHUB_TOKEN}
+      - RUNNER_NAME=${RUNNER_NAME:-devidence-homelab-runner}
+      - REGISTRATION_TOKEN=${REGISTRATION_TOKEN:-}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./runner-data:/home/runner/_work
+      - ../:/workspace:ro  # Read-only access to the piKazt workspace
+    restart: unless-stopped
+    networks:
+      - runner-network
+    privileged: true  # Required for Docker-in-Docker operations
+
+networks:
+  runner-network:
+    driver: bridge
+
+volumes:
+  runner-data:
+    driver: local
