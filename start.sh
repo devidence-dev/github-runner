@@ -245,6 +245,7 @@ echo "🏷️  Labels: raspberry-pi,arm64,docker"
 echo "🔧 Running config.sh..."
 timeout 300 ./config.sh \
     --unattended \
+    --replace \
     --url "https://github.com/${GH_OWNER}" \
     --token "${REG_TOKEN}" \
     --name "${RUNNER_NAME}" \
