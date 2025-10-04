@@ -266,10 +266,10 @@ echo "📏 Final token length: ${#REG_TOKEN} characters"
 # Configure the runner
 echo "⚙️  Configuring runner with official GitHub Actions Runner..."
 echo "🔗 URL: https://github.com/${GH_OWNER}/${GH_REPOSITORY}"
-echo "🏷️  Labels: raspberry-pi,arm64,docker,pikazt"
+echo "🏷️  Labels: raspberry-pi,arm64,docker"
 
 # Run configuration with timeout
-timeout 300 ./config.sh     --unattended     --url "https://github.com/${GH_OWNER}/${GH_REPOSITORY}"     --token "${REG_TOKEN}"     --name "${RUNNER_NAME}"     --labels "raspberry-pi,arm64,docker,pikazt"     --work "_work"
+timeout 300 ./config.sh     --unattended     --url "https://github.com/${GH_OWNER}/${GH_REPOSITORY}"     --token "${REG_TOKEN}"     --name "${RUNNER_NAME}"     --labels "raspberry-pi,arm64,docker"     --work "_work"
 
 config_exit_code=$?
 

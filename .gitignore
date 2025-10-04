@@ -1,0 +1,27 @@
+# Ignore environment files containing secrets
+.env
+
+# Docker artifacts
+/runner-data/
+/var/lib/docker/
+/var/run/docker.sock
+
+# Node, Python, etc (if added later)
+node_modules/
+venv/
+__pycache__/
+
+# Editor and OS files
+.DS_Store
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Logs and temporary
+*.log
+tmp/
+*.tmp
+
+# Ignore built images or artifacts
+*.tar.gz

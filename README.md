@@ -22,6 +22,36 @@ cp .env.example .env
 - `GH_OWNER` — organization or username
 - `GITHUB_TOKEN` — Personal Access Token with `repo` scope
 
+### ✅ Latest env variables (present in `.env.example`)
+
+- `GH_OWNER` — organization or username (required)
+- `GH_REPOSITORY` — repository name (optional; used by start script to form URL)
+- `GH_TOKEN` — Personal Access Token with `repo` scope (required)
+- `RUNNER_NAME` — friendly name for the runner (optional)
+- `RUNNER_DATA` — path to persist runner data (default: `./runner-data`)
+- `REGISTRATION_TOKEN` — optional manual registration token (if automatic retrieval fails)
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — optional; for notifications
+
+3. Example `.env` quick template (edit values):
+
+```bash
+# GitHub configuration
+GH_OWNER=your-organization-or-username
+GH_REPOSITORY=your-repo-name
+GH_TOKEN=ghp_xxx_your_token_here
+
+# Runner configuration
+RUNNER_NAME=raspi-runner-01
+RUNNER_DATA=./runner-data
+
+# Optional: manual registration token
+# REGISTRATION_TOKEN=your_manual_token_here
+
+# Optional: Telegram notifications
+# TELEGRAM_BOT_TOKEN=your_bot_token_here
+# TELEGRAM_CHAT_ID=your_chat_id_here
+```
+
 3. Build and run with docker-compose:
 
 ```bash
@@ -37,3 +67,9 @@ Behavior notes
 
 Want to remove more files?
 If you want me to delete any files or further prune the repository, tell me which files to remove and I'll proceed after your confirmation.
+
+Troubleshooting quick tips
+- If the runner doesn't register, check `docker-compose logs -f github-runner` and confirm `GH_TOKEN` has `repo` scope.
+- If you get permission errors with Docker socket, ensure the host user can access Docker or run the container with appropriate privileges.
+
+Made changes to `.env.example` and `docker-compose.yml` are reflected here. If you want different default paths, labels, or remove workspace-specific comments, I can update them.
