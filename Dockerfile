@@ -7,8 +7,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # https://github.com/actions/runner/releases
 ARG RUNNER_VERSION=2.328.0
 
-# Install minimal dependencies for runner + Docker-in-Docker
-RUN apt-get update && apt-get install -y \
+# Apply security updates and install dependencies
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     curl \
     tar \
     gzip \
@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     docker-compose \
     sudo \
     ca-certificates \
+    libicu-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a 'runner' user with sudo and docker permissions
@@ -30,9 +31,7 @@ RUN useradd -m -s /bin/bash runner && \
 WORKDIR /home/runner
 RUN curl -O -L "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz" && \
     tar xzf ./actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz && \
-    rm actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz && \
-    # Install additional runner dependencies
-    sudo ./bin/installdependencies.sh || echo "Some dependencies may not be available"
+    rm actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz
 
 # Change ownership of files to the 'runner' user
 RUN chown -R runner:runner /home/runner

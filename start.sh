@@ -163,7 +163,7 @@ cd /home/runner
 # Ensure _work directory exists and has correct permissions
 echo "📁 Checking work directory..."
 mkdir -p _work
-chmod 755 _work
+chmod 755 _work || echo "⚠️  Could not set permissions on _work directory, continuing..."
 ls -la _work/
 
 # Validate initial connectivity and permissions
@@ -241,18 +241,28 @@ echo "⚙️  Configuring runner with official GitHub Actions Runner..."
 echo "🔗 URL: https://github.com/${GH_OWNER}"
 echo "🏷️  Labels: raspberry-pi,arm64,docker"
 
-# Run configuration with timeout
-timeout 300 ./config.sh     --unattended     --url "https://github.com/${GH_OWNER}"     --token "${REG_TOKEN}"     --name "${RUNNER_NAME}"     --labels "raspberry-pi,arm64,docker"     --work "_work"
+# Run configuration with timeout and capture full output
+echo "🔧 Running config.sh..."
+timeout 300 ./config.sh \
+    --unattended \
+    --url "https://github.com/${GH_OWNER}" \
+    --token "${REG_TOKEN}" \
+    --name "${RUNNER_NAME}" \
+    --labels "raspberry-pi,arm64,docker" \
+    --work "_work" 2>&1 | tee /tmp/config.log
 
-config_exit_code=$?
+config_exit_code=${PIPESTATUS[0]}
 
 # Check configuration result
 if [[ $config_exit_code -eq 124 ]]; then
     echo "❌ Error: Configuration timed out after 5 minutes (timeout)"
+    cat /tmp/config.log
     exit 1
 elif [[ $config_exit_code -ne 0 ]]; then
     echo "❌ Error: Runner configuration failed (code: $config_exit_code)"
     echo "💡 Check that the token is valid and not expired"
+    echo "📋 Configuration output:"
+    cat /tmp/config.log
     exit 1
 fi
 
