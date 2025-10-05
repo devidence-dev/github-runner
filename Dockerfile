@@ -19,6 +19,10 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     sudo \
     ca-certificates \
     libicu-dev \
+    binutils \
+    file \
+    libc6 \
+    libssl3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a 'runner' user with sudo and docker permissions

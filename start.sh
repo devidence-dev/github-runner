@@ -131,6 +131,55 @@ get_registration_token() {
     echo "$token"
 }
 
+# Function to remove existing runner via API
+remove_existing_runner() {
+    local runner_name="$1"
+    echo "🔍 Checking if runner '${runner_name}' already exists in GitHub..." >&2
+    
+    # Get list of runners
+    local api_url="https://api.github.com/orgs/${GH_OWNER}/actions/runners"
+    local response=$(curl -s --connect-timeout 10 --max-time 30 \
+        -H "Accept: application/vnd.github.v3+json" \
+        -H "Authorization: token ${GH_TOKEN}" \
+        "$api_url" 2>&1)
+    
+    if [[ $? -ne 0 ]]; then
+        echo "⚠️  Could not check existing runners, continuing anyway..." >&2
+        return 0
+    fi
+    
+    # Extract runner ID if exists
+    local runner_id=""
+    if command -v jq >/dev/null 2>&1; then
+        runner_id=$(echo "$response" | jq -r ".runners[] | select(.name==\"${runner_name}\") | .id" 2>/dev/null)
+    else
+        # Fallback without jq (basic grep)
+        runner_id=$(echo "$response" | grep -o "\"name\":\"${runner_name}\"" -A 10 | grep -o '"id":[0-9]*' | head -1 | cut -d: -f2)
+    fi
+    
+    if [[ -n "$runner_id" && "$runner_id" != "null" ]]; then
+        echo "🗑️  Found existing runner with ID: ${runner_id}, removing it..." >&2
+        local delete_url="https://api.github.com/orgs/${GH_OWNER}/actions/runners/${runner_id}"
+        local delete_response=$(curl -s -w "\nHTTP_CODE:%{http_code}" \
+            -X DELETE \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${GH_TOKEN}" \
+            "$delete_url" 2>&1)
+        
+        local http_code=$(echo "$delete_response" | grep "HTTP_CODE:" | cut -d: -f2)
+        
+        if [[ "$http_code" == "204" ]]; then
+            echo "✅ Successfully removed existing runner from GitHub" >&2
+            # Wait a bit for GitHub to process the deletion
+            sleep 2
+        else
+            echo "⚠️  Could not remove runner (HTTP ${http_code}), will try --replace flag" >&2
+        fi
+    else
+        echo "✅ No existing runner found with that name" >&2
+    fi
+}
+
 # Cleanup function on exit
 cleanup() {
     echo "🧹 Cleaning up runner..."
@@ -235,6 +284,9 @@ fi
 
 echo "🔐 Final token for configuration (preview): ${REG_TOKEN:0:8}...${REG_TOKEN: -4}"
 echo "📏 Final token length: ${#REG_TOKEN} characters"
+
+# Try to remove existing runner from GitHub API before configuring
+remove_existing_runner "${RUNNER_NAME}"
 
 # Configure the runner
 echo "⚙️  Configuring runner with official GitHub Actions Runner..."
