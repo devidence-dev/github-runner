@@ -3,6 +3,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        RUNNER_VERSION: ${RUNNER_VERSION:-2.328.0}
+        SONAR_SCANNER_VERSION: ${SONAR_SCANNER_VERSION:-7.3.0.5189}
+    image: github-runner:${RUNNER_VERSION:-2.328.0}  # Tag con la versión
     container_name: github-actions-runner
     env_file:
       - .env
@@ -20,7 +24,9 @@ services:
     restart: unless-stopped
     networks:
       - runner-network
-    privileged: true  # Required for Docker-in-Docker operations
+    privileged: true
+    tmpfs:
+      - /tmp:exec,mode=1777
 
 networks:
   runner-network:
