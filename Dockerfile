@@ -2,8 +2,10 @@ FROM debian:13.1-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ARG RUNNER_VERSION=2.328.0
-ARG SONAR_SCANNER_VERSION=7.3.0.5189
+ARG RUNNER_VERSION=2.330.0
+ARG SONAR_SCANNER_VERSION=8.0.0.6341
+ARG BUILDPLATFORM
+ARG TARGETPLATFORM
 
 # Apply security updates and install dependencies (including unzip)
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
@@ -32,15 +34,31 @@ RUN useradd -m -s /bin/bash runner && \
 
 # Download GitHub Actions Runner
 WORKDIR /home/runner
-RUN curl -O -L "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz" && \
-    tar xzf "./actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz" && \
-    rm "./actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz" && \
+RUN set -e && \
+    if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+      RUNNER_ARCH="arm64"; \
+    elif [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+      RUNNER_ARCH="x64"; \
+    else \
+      echo "❌ Arquitectura no soportada: $TARGETPLATFORM"; exit 1; \
+    fi && \
+    curl -O -L "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${RUNNER_ARCH}-${RUNNER_VERSION}.tar.gz" && \
+    tar xzf "./actions-runner-linux-${RUNNER_ARCH}-${RUNNER_VERSION}.tar.gz" && \
+    rm "./actions-runner-linux-${RUNNER_ARCH}-${RUNNER_VERSION}.tar.gz" && \
     chown -R runner:runner /home/runner
 
 # Download and install SonarScanner CLI
-RUN curl -o /tmp/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux-aarch64.zip && \
+RUN set -e && \
+    if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+      SONAR_ARCH="aarch64"; \
+    elif [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+      SONAR_ARCH="x64"; \
+    else \
+      echo "❌ Arquitectura no soportada: $TARGETPLATFORM"; exit 1; \
+    fi && \
+    curl -o /tmp/sonar-scanner.zip "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux-${SONAR_ARCH}.zip" && \
     unzip /tmp/sonar-scanner.zip -d /opt && \
-    mv /opt/sonar-scanner-${SONAR_SCANNER_VERSION}-linux-aarch64 /opt/sonar-scanner && \
+    mv /opt/sonar-scanner-${SONAR_SCANNER_VERSION}-linux-${SONAR_ARCH} /opt/sonar-scanner && \
     ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner && \
     rm /tmp/sonar-scanner.zip && \
     chown -R runner:runner /opt/sonar-scanner
