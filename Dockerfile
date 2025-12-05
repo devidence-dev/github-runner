@@ -26,8 +26,10 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Create runner user
-RUN useradd -m -s /bin/bash runner && \
+# Create runner user with matching host UID/GID
+RUN groupadd -g 1000 runner && \
+    useradd -m -u 1000 -g 1000 -s /bin/bash runner && \
+    groupmod -g 989 docker && \
     usermod -aG docker runner && \
     usermod -aG sudo runner && \
     echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -62,6 +64,11 @@ RUN set -e && \
     ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner && \
     rm /tmp/sonar-scanner.zip && \
     chown -R runner:runner /opt/sonar-scanner
+
+# Create work directories with proper permissions
+RUN mkdir -p /home/runner/_work/_tool /home/runner/_work/_actions && \
+    chown -R runner:runner /home/runner/_work && \
+    chmod -R 755 /home/runner/_work
 
 USER runner
 

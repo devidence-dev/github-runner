@@ -5,6 +5,14 @@ set -e
 
 echo "🚀 Starting GitHub Actions Runner for Raspberry Pi..."
 
+# Fix permissions for _work directory if mounted as volume
+echo "🔧 Ensuring correct permissions on work directory..."
+if [ -d "/home/runner/_work" ]; then
+    sudo chown -R runner:runner /home/runner/_work 2>/dev/null || true
+    sudo chmod -R 755 /home/runner/_work 2>/dev/null || true
+fi
+mkdir -p /home/runner/_work/_tool /home/runner/_work/_actions 2>/dev/null || true
+
 # Validate required environment variables
 echo "🔍 Checking environment variables..."
 echo "   GH_OWNER: ${GH_OWNER:-'❌ Not configured'}"
