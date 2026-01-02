@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         RUNNER_VERSION: ${RUNNER_VERSION:-2.329.0}
-        SONAR_SCANNER_VERSION: ${SONAR_SCANNER_VERSION:-7.3.0.5189}
+        # SONAR_SCANNER_VERSION: ${SONAR_SCANNER_VERSION:-7.3.0.5189}
     image: ghcr.io/actions/actions-runner:${RUNNER_VERSION:-2.329.0}
     container_name: github-actions-runner
     env_file:
@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
     networks:
       - runner-network
-    privileged: true
+    # privileged: true
     tmpfs:
       - /tmp:exec,mode=1777
 
