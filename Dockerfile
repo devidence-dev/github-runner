@@ -1,8 +1,8 @@
-FROM debian:13.1-slim
+FROM debian:13.3-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ARG RUNNER_VERSION=2.330.0
+ARG RUNNER_VERSION=2.331.0
 # ARG SONAR_SCANNER_VERSION=8.0.0.6341
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
@@ -24,6 +24,9 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     libc6 \
     libssl3 \
     unzip \
+    python3 \
+    python3-pip \
+    python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
 # Create runner user with matching host UID/GID
