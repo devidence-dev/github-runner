@@ -34,9 +34,11 @@ ARG TARGETPLATFORM
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl=8.14.1-2+deb13u2 \
     jq=1.7.1-6+deb13u1 \
+    file=1:5.46-5 \
     git=1:2.47.3-0+deb13u1 \
     docker.io=26.1.5+dfsg1-9+b12 \
     docker-compose=2.26.1-4 \
+    sudo=1.9.16p2-3+deb13u1 \
     ca-certificates=20250419 \
     libicu76=76.1-4 \
     libc6=2.41-12+deb13u2 \
@@ -51,7 +53,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN groupadd -g 1000 runner && \
     useradd -m -u 1000 -g 1000 -s /bin/bash runner && \
     groupmod -g 989 docker && \
-    usermod -aG docker runner
+    usermod -aG docker runner && \
+    usermod -aG sudo runner && \
+    echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 WORKDIR /home/runner
 
