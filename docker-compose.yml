@@ -28,6 +28,12 @@ services:
     tmpfs:
       - /tmp:exec,mode=1777
 
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 4G
+
 networks:
   runner-network:
     driver: bridge
