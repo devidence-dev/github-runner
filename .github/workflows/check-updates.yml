@@ -67,7 +67,6 @@ jobs:
           # Configurar GHCR token si está disponible
           if [ -n "${GITHUB_TOKEN}" ]; then
             echo "🔑 Configurando GitHub token para GHCR..."
-            sudo /tmp/icr config set registry.ghcr.enabled true
             sudo /tmp/icr config set registry.ghcr.token "${GITHUB_TOKEN}"
           fi
           
