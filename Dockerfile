@@ -42,7 +42,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates=20250419 \
     libicu76=76.1-4 \
     libc6=2.41-12+deb13u2 \
-    libssl3t64=3.5.5-1~deb13u1 \
+    libssl3t64=3.5.5-1~deb13u2 \
     unzip=6.0-29 \
     python3=3.13.5-1 \
     python3-pip=25.1.1+dfsg-1 \

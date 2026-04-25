@@ -43,7 +43,7 @@ except ImportError:
 
 query_versions() {
     local section="$1"
-    local packages
+    local packages packages_inline
     packages=$(parse_section "$section")
 
     if [ -z "$packages" ]; then
@@ -51,9 +51,11 @@ query_versions() {
         return
     fi
 
+    packages_inline=$(echo "$packages" | tr '\n' ' ')
+
     docker run --rm "${IMAGE}" bash -c "
         apt-get update -qq 2>/dev/null
-        for pkg in ${packages}; do
+        for pkg in ${packages_inline}; do
             version=\$(apt-cache policy \"\$pkg\" 2>/dev/null | awk '/Candidate:/ {print \$2}')
             if [ -n \"\$version\" ] && [ \"\$version\" != '(none)' ]; then
                 echo \"    \$pkg=\$version \\\\\"
