@@ -1,0 +1,8 @@
+# Additional images to monitor (not running in Docker)
+images:
+  - service: "my-external-app"
+    image: "ghcr.io/myuser/myapp:v2.3.1"
+  - service: "nginx-proxy"
+    image: "nginx:1.25-alpine"
+  - service: "postgres"
+    image: "postgres:15"

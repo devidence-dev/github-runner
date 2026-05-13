@@ -1,5 +1,6 @@
 # Ignore environment files containing secrets
 .env
+extra-images.yml
 
 # Docker artifacts
 /runner-data/

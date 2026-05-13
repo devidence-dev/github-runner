@@ -37,14 +37,12 @@ jobs:
             *) echo "⚠️ Arquitectura no reconocida"; exit 1 ;;
           esac
 
-          # Descargar directamente a /tmp (NO tiene noexec)
           echo "📥 Descargando a /tmp (evitando restricción noexec)..."
           curl -L -f --retry 3 -o /tmp/icr \
             "https://github.com/devidence-dev/image-container-reporter/releases/latest/download/icr-linux-${BINARY_ARCH}"
 
           chmod +x /tmp/icr
 
-          # Verificar
           echo "🔍 Verificando:"
           file /tmp/icr
 
@@ -63,26 +61,32 @@ jobs:
             sudo /tmp/icr config set telegram.chat_id "${TELEGRAM_CHAT_ID}"
             sudo /tmp/icr config set telegram.enabled true
           fi
-          
-          # Configurar GHCR token si está disponible
+
           if [ -n "${GITHUB_TOKEN}" ]; then
             echo "🔑 Configurando GitHub token para GHCR..."
             sudo /tmp/icr config set registry.ghcr.token "${GITHUB_TOKEN}"
           fi
-          
+
           echo "🔍 Iniciando scan..."
           if [ -n "${TELEGRAM_BOT_TOKEN}" ]; then
-            # Pasar GITHUB_TOKEN explícitamente a sudo
-            sudo GITHUB_TOKEN="${GITHUB_TOKEN}" /tmp/icr scan --docker-daemon --notify --output json --output-file /tmp/scan-results.json
+            sudo GITHUB_TOKEN="${GITHUB_TOKEN}" /tmp/icr scan \
+              --docker-daemon \
+              --notify \
+              --output json \
+              --output-file /tmp/scan-results.json \
+              --extra-images-file /opt/runner/extra-images.yml
           else
-            sudo GITHUB_TOKEN="${GITHUB_TOKEN}" /tmp/icr scan --docker-daemon --output json --output-file /tmp/scan-results.json
+            sudo GITHUB_TOKEN="${GITHUB_TOKEN}" /tmp/icr scan \
+              --docker-daemon \
+              --output json \
+              --output-file /tmp/scan-results.json \
+              --extra-images-file /opt/runner/extra-images.yml
           fi
-          
-          # Copiar con sudo y luego cambiar permisos
+
           sudo cp /tmp/scan-results.json ./scan-results.json
           sudo chown runner:runner ./scan-results.json
           chmod 644 ./scan-results.json
-          
+
           echo "✅ Scan completado"
 
       - name: 📊 Show detailed scan summary
@@ -90,63 +94,55 @@ jobs:
           if [ -f "scan-results.json" ]; then
             echo "📋 Resumen detallado del scan de contenedores:"
             echo "========================================"
-            
-            # Verificar que jq esté disponible
+
             if command -v jq >/dev/null 2>&1; then
-              # Mostrar estructura del JSON para debug
               echo "🔍 Estructura del JSON:"
               jq 'keys' scan-results.json 2>/dev/null || echo "Error leyendo claves JSON"
-              
-              # Extraer estadísticas (adaptándose a la estructura real)
+
               UPDATES_COUNT=$(jq -r 'if has("updates_available") then .updates_available | length else 0 end' scan-results.json 2>/dev/null || echo '0')
               UP_TO_DATE_COUNT=$(jq -r 'if has("up_to_date_services") then .up_to_date_services | length elif has("up_to_date") then .up_to_date | length else 0 end' scan-results.json 2>/dev/null || echo '0')
               TOTAL_CONTAINERS=$(jq -r 'if has("total_services_found") then .total_services_found elif has("services_scanned") then .services_scanned else 0 end' scan-results.json 2>/dev/null || echo '0')
               ERRORS_COUNT=$(jq -r 'if has("errors") then .errors | length else 0 end' scan-results.json 2>/dev/null || echo '0')
-              
+
               echo "🔄 Actualizaciones encontradas: $UPDATES_COUNT"
               echo "✅ Contenedores actualizados: $UP_TO_DATE_COUNT"
               echo "🐳 Total contenedores escaneados: $TOTAL_CONTAINERS"
               echo "❌ Errores encontrados: $ERRORS_COUNT"
               echo ""
-              
-              # Mostrar actualizaciones disponibles si las hay
+
               if [ "$UPDATES_COUNT" -gt 0 ]; then
                 echo "🔄 ACTUALIZACIONES DISPONIBLES:"
                 echo "------------------------------"
                 jq -r '.updates_available[] | "  📦 \(.service_name): \(.current_image.tag) → \(.latest_image.tag) (\(.update_type))"' scan-results.json 2>/dev/null || echo "Error procesando actualizaciones"
                 echo ""
               fi
-              
-              # Mostrar servicios actualizados
+
               if [ "$UP_TO_DATE_COUNT" -gt 0 ]; then
                 echo "✅ SERVICIOS ACTUALIZADOS:"
                 echo "-------------------------"
                 jq -r '.up_to_date_services[] | "  ✓ \(.)"' scan-results.json 2>/dev/null || echo "Error procesando servicios actualizados"
                 echo ""
               fi
-              
-              # Mostrar errores si los hay
+
               if [ "$ERRORS_COUNT" -gt 0 ]; then
                 echo "❌ ERRORES ENCONTRADOS:"
                 echo "----------------------"
                 jq -r '.errors[] | "  ⚠️ \(.)"' scan-results.json 2>/dev/null || echo "Error procesando errores"
                 echo ""
               fi
-              
+
             else
               echo "⚠️ jq no disponible - mostrando contenido raw del JSON:"
-              echo "📄 Contenido completo del scan:"
               cat scan-results.json
             fi
-            
-            # Debug mode: mostrar archivo completo
+
             if [ "${{ github.event.inputs.debug_mode }}" = "true" ]; then
               echo ""
               echo "🔧 DEBUG MODE - JSON Completo:"
               echo "============================="
               cat scan-results.json | jq '.' 2>/dev/null || cat scan-results.json
             fi
-            
+
           else
             echo "❌ No se encontró archivo scan-results.json"
             echo "📂 Archivos en directorio actual:"
