@@ -19,6 +19,8 @@ services:
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock
+      - /var/lib/libvirt/images:/var/lib/libvirt/images
       - ${HOST_REPOS_PATH:-~/repositories}:/home/runner/repositories
       - ${RUNNER_DATA:-./runner-data}:/home/runner/_work
       - ${EXTRA_IMAGES_FILE:-./extra-images.yml}:/opt/runner/extra-images.yml:ro
