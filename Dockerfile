@@ -47,8 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3=3.13.5-1 \
     python3-pip=25.1.1+dfsg-1 \
     python3-venv=3.13.5-1 \
-    libvirt-clients=11.3.0-3+deb13u2 \
-    python3-libvirt=11.3.0-1 \
+    openssh-client=1:10.0p1-7+deb13u4 \
     && rm -rf /var/lib/apt/lists/*
 
 
@@ -67,11 +66,11 @@ RUN pip3 install --no-cache-dir --break-system-packages ansible
 # Create runner user with matching host UID/GID
 RUN groupadd -g 1000 runner && \
     useradd -m -u 1000 -g 1000 -s /bin/bash runner && \
-    groupadd -g 105 libvirt && \
+    groupadd -g 986 incus-admin && \
     groupmod -g 989 docker && \
     usermod -aG docker runner && \
     usermod -aG sudo runner && \
-    usermod -aG libvirt runner && \
+    usermod -aG incus-admin runner && \
     echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 WORKDIR /home/runner
