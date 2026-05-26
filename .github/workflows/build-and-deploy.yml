@@ -42,7 +42,7 @@ jobs:
           git clone https://x-access-token:${HOMELAB_DEPLOY_TOKEN}@github.com/devidence-dev/homelab.git /tmp/homelab-runner-deploy
           cd /tmp/homelab-runner-deploy
           sed -i "s|tag: .*|tag: \"${{ needs.build.outputs.image_tag }}\"|" \
-            kubernetes/apps/github-runner/values.yaml
+            kubernetes/infrastructure/github-runner/values.yaml
           git config user.email "ci@devidence.dev"
           git config user.name "homelab-ci"
           git add kubernetes/apps/github-runner/values.yaml
