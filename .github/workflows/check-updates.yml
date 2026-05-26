@@ -24,6 +24,8 @@ env:
 jobs:
   check-updates:
     runs-on: self-hosted
+    permissions:
+      packages: read
 
     steps:
       - name: 📦 Download Docker Image Reporter
@@ -54,6 +56,8 @@ jobs:
           fi
 
       - name: 🔍 Scan running Docker containers for updates
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -n "${TELEGRAM_BOT_TOKEN}" ] && [ -n "${TELEGRAM_CHAT_ID}" ]; then
             echo "📱 Configurando Telegram..."
