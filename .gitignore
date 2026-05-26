@@ -26,3 +26,5 @@ tmp/
 
 # Ignore built images or artifacts
 *.tar.gz
+
+extra-images.yml
