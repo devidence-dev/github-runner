@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     name: Build and push image
-    runs-on: [self-hosted, linux, homelab]
+    runs-on: self-hosted
     outputs:
       image_tag: ${{ inputs.runner_version }}
     steps:
@@ -32,7 +32,7 @@ jobs:
   deploy:
     name: Update homelab
     needs: build
-    runs-on: [self-hosted, linux, homelab]
+    runs-on: self-hosted
     environment: production
     steps:
       - name: Update image tag in homelab

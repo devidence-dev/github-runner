@@ -311,6 +311,10 @@ if [[ -n "$RUNNER_GROUP" ]]; then
     CONFIG_CMD="$CONFIG_CMD --runnergroup ${RUNNER_GROUP}"
 fi
 
+if [[ -n "$RUNNER_LABELS" ]]; then
+    CONFIG_CMD="$CONFIG_CMD --labels ${RUNNER_LABELS}"
+fi
+
 CONFIG_CMD="$CONFIG_CMD --work _work"
 
 # Run configuration with timeout and capture full output
