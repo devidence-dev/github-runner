@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip=25.1.1+dfsg-1 \
     python3-venv=3.13.5-1 \
     openssh-client=1:10.0p1-7+deb13u4 \
-    gnupg=2.2.45-4+b1 \
+    gnupg=2.4.7-21+deb13u1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Docker CLI from official Docker repo
@@ -76,7 +76,7 @@ RUN pip3 install --no-cache-dir --break-system-packages ansible
 RUN groupadd -g 1000 runner && \
     useradd -m -u 1000 -g 1000 -s /bin/bash runner && \
     groupadd -g 986 incus-admin && \
-    groupmod -g 989 docker && \
+    groupadd -g 989 docker && \
     usermod -aG docker runner && \
     usermod -aG sudo runner && \
     usermod -aG incus-admin runner && \
