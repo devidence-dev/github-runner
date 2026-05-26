@@ -55,7 +55,7 @@ jobs:
             exit 1
           fi
 
-      - name: 🔍 Scan running Docker containers for updates
+      - name: 🔍 Scan running Kubernetes pods for updates
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -71,17 +71,17 @@ jobs:
             sudo /tmp/icr config set registry.ghcr.token "${GITHUB_TOKEN}"
           fi
 
-          echo "🔍 Iniciando scan..."
+          echo "🔍 Iniciando scan de pods en Kubernetes..."
           if [ -n "${TELEGRAM_BOT_TOKEN}" ]; then
             sudo GITHUB_TOKEN="${GITHUB_TOKEN}" /tmp/icr scan \
-              --docker-daemon \
+              --kubernetes \
               --notify \
               --output json \
               --output-file /tmp/scan-results.json \
               --extra-images-file /opt/runner/extra-images.yml
           else
             sudo GITHUB_TOKEN="${GITHUB_TOKEN}" /tmp/icr scan \
-              --docker-daemon \
+              --kubernetes \
               --output json \
               --output-file /tmp/scan-results.json \
               --extra-images-file /opt/runner/extra-images.yml
