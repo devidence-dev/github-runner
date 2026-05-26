@@ -61,34 +61,33 @@ jobs:
         run: |
           if [ -n "${TELEGRAM_BOT_TOKEN}" ] && [ -n "${TELEGRAM_CHAT_ID}" ]; then
             echo "📱 Configurando Telegram..."
-            sudo /tmp/icr config set telegram.bot_token "${TELEGRAM_BOT_TOKEN}"
-            sudo /tmp/icr config set telegram.chat_id "${TELEGRAM_CHAT_ID}"
-            sudo /tmp/icr config set telegram.enabled true
+            /tmp/icr config set telegram.bot_token "${TELEGRAM_BOT_TOKEN}"
+            /tmp/icr config set telegram.chat_id "${TELEGRAM_CHAT_ID}"
+            /tmp/icr config set telegram.enabled true
           fi
 
           if [ -n "${GITHUB_TOKEN}" ]; then
             echo "🔑 Configurando GitHub token para GHCR..."
-            sudo /tmp/icr config set registry.ghcr.token "${GITHUB_TOKEN}"
+            /tmp/icr config set registry.ghcr.token "${GITHUB_TOKEN}"
           fi
 
           echo "🔍 Iniciando scan de pods en Kubernetes..."
           if [ -n "${TELEGRAM_BOT_TOKEN}" ]; then
-            sudo GITHUB_TOKEN="${GITHUB_TOKEN}" /tmp/icr scan \
+            /tmp/icr scan \
               --kubernetes \
               --notify \
               --output json \
               --output-file /tmp/scan-results.json \
               --extra-images-file /opt/runner/extra-images.yml
           else
-            sudo GITHUB_TOKEN="${GITHUB_TOKEN}" /tmp/icr scan \
+            /tmp/icr scan \
               --kubernetes \
               --output json \
               --output-file /tmp/scan-results.json \
               --extra-images-file /opt/runner/extra-images.yml
           fi
 
-          sudo cp /tmp/scan-results.json ./scan-results.json
-          sudo chown runner:runner ./scan-results.json
+          cp /tmp/scan-results.json ./scan-results.json
           chmod 644 ./scan-results.json
 
           echo "✅ Scan completado"
