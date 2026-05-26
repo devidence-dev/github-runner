@@ -36,8 +36,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     jq=1.7.1-6+deb13u2 \
     file=1:5.46-5 \
     git=1:2.47.3-0+deb13u1 \
-    docker.io=26.1.5+dfsg1-9+b13 \
-    docker-compose=2.26.1-4 \
     sudo=1.9.16p2-3+deb13u2 \
     ca-certificates=20250419 \
     libicu76=76.1-4 \
@@ -48,12 +46,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip=25.1.1+dfsg-1 \
     python3-venv=3.13.5-1 \
     openssh-client=1:10.0p1-7+deb13u4 \
+    gnupg=2.2.45-4+b1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Docker CLI from official Docker repo
+RUN install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
+    chmod a+r /etc/apt/keyrings/docker.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian trixie stable" | \
+    tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    apt-get update && apt-get install -y --no-install-recommends \
+    docker-ce-cli \
+    docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/*
 
 
 # Install Terraform
-RUN apt-get update && apt-get install -y --no-install-recommends gnupg && \
-    curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor | \
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor | \
     tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=VERSION_CODENAME=).*' /etc/os-release) main" | \
     tee /etc/apt/sources.list.d/hashicorp.list && \
