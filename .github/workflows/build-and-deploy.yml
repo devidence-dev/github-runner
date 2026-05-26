@@ -1,0 +1,51 @@
+name: Build and Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner_version:
+        description: "GitHub Actions Runner CLI version (e.g. 2.334.0)"
+        required: true
+        default: "2.334.0"
+
+jobs:
+  build:
+    name: Build and push image
+    runs-on: [self-hosted, linux, homelab]
+    outputs:
+      image_tag: ${{ inputs.runner_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: |
+          docker build \
+            --build-arg RUNNER_VERSION=${{ inputs.runner_version }} \
+            -f Dockerfile \
+            -t zot.devidence.dev/github-runner:${{ inputs.runner_version }} \
+            .
+
+      - name: Push to Zot
+        run: docker push zot.devidence.dev/github-runner:${{ inputs.runner_version }}
+
+  deploy:
+    name: Update homelab
+    needs: build
+    runs-on: [self-hosted, linux, homelab]
+    environment: production
+    steps:
+      - name: Update image tag in homelab
+        env:
+          HOMELAB_DEPLOY_TOKEN: ${{ secrets.HOMELAB_DEPLOY_TOKEN }}
+        run: |
+          git clone https://x-access-token:${HOMELAB_DEPLOY_TOKEN}@github.com/devidence-dev/homelab.git /tmp/homelab-runner-deploy
+          cd /tmp/homelab-runner-deploy
+          sed -i "s|tag: .*|tag: \"${{ needs.build.outputs.image_tag }}\"|" \
+            kubernetes/apps/github-runner/values.yaml
+          git config user.email "ci@devidence.dev"
+          git config user.name "homelab-ci"
+          git add kubernetes/apps/github-runner/values.yaml
+          git commit -m "chore(github-runner): bump image to ${{ needs.build.outputs.image_tag }}"
+          git push
+          rm -rf /tmp/homelab-runner-deploy

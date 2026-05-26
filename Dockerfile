@@ -1,4 +1,4 @@
-FROM debian:13.4-slim AS builder
+FROM debian:13.5-slim AS builder
 
 ARG RUNNER_VERSION=2.333.1
 ARG TARGETPLATFORM
@@ -24,7 +24,7 @@ RUN set -e && \
     rm "./actions-runner-linux-${RUNNER_ARCH}-${RUNNER_VERSION}.tar.gz"
 
 
-FROM debian:13.4-slim
+FROM debian:13.5-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
