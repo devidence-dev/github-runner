@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Login to Zot
+        run: docker login zot.devidence.dev -u "$ZOT_USERNAME" -p "$ZOT_PASSWORD"
+
       - name: Build image
         run: |
           docker build \
