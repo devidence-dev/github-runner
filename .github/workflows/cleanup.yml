@@ -1,0 +1,87 @@
+name: 🧹 Cleanup unused images
+
+on:
+  schedule:
+    - cron: '0 8 */3 * *'  # Every 3 days at 3:00 AM GMT-5
+  workflow_dispatch:
+
+env:
+  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+jobs:
+  cleanup:
+    name: 🧹 Prune Docker & containerd images
+    runs-on: self-hosted
+    steps:
+      - name: 🐳 Prune Docker images
+        id: docker
+        run: |
+          BEFORE=$(docker system df --format '{{json .}}' | jq -r 'select(.Type=="Images") | .Size' 2>/dev/null || echo "unknown")
+
+          OUTPUT=$(docker system prune -af 2>&1)
+
+          AFTER=$(docker system df --format '{{json .}}' | jq -r 'select(.Type=="Images") | .Size' 2>/dev/null || echo "unknown")
+          RECLAIMED=$(echo "$OUTPUT" | grep -i "Total reclaimed space" | awk '{print $NF}' || echo "0B")
+          IMAGES_REMOVED=$(echo "$OUTPUT" | grep -c "^Deleted:" || echo "0")
+
+          echo "reclaimed=$RECLAIMED" >> "$GITHUB_OUTPUT"
+          echo "images_removed=$IMAGES_REMOVED" >> "$GITHUB_OUTPUT"
+          echo "before=$BEFORE" >> "$GITHUB_OUTPUT"
+          echo "after=$AFTER" >> "$GITHUB_OUTPUT"
+
+      - name: 📦 Download crictl
+        run: |
+          CRICTL_VERSION="v1.32.0"
+          ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
+          curl -fsSL -o /tmp/crictl.tar.gz \
+            "https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz"
+          tar -xzf /tmp/crictl.tar.gz -C /tmp
+          chmod +x /tmp/crictl
+          rm /tmp/crictl.tar.gz
+
+      - name: 🔧 Prune containerd images
+        id: containerd
+        run: |
+          ENDPOINT="unix:///run/k3s/containerd/containerd.sock"
+
+          BEFORE_LIST=$(sudo /tmp/crictl --runtime-endpoint "$ENDPOINT" images -q 2>/dev/null | wc -l || echo "0")
+
+          OUTPUT=$(sudo /tmp/crictl --runtime-endpoint "$ENDPOINT" rmi --prune 2>&1)
+
+          AFTER_LIST=$(sudo /tmp/crictl --runtime-endpoint "$ENDPOINT" images -q 2>/dev/null | wc -l || echo "0")
+          REMOVED=$(( BEFORE_LIST - AFTER_LIST ))
+          [ "$REMOVED" -lt 0 ] && REMOVED=0
+
+          echo "removed=$REMOVED" >> "$GITHUB_OUTPUT"
+          echo "before=$BEFORE_LIST" >> "$GITHUB_OUTPUT"
+          echo "after=$AFTER_LIST" >> "$GITHUB_OUTPUT"
+
+      - name: 📱 Notify Telegram
+        if: always()
+        run: |
+          DOCKER_RECLAIMED="${{ steps.docker.outputs.reclaimed }}"
+          DOCKER_IMAGES="${{ steps.docker.outputs.images_removed }}"
+          DOCKER_BEFORE="${{ steps.docker.outputs.before }}"
+          DOCKER_AFTER="${{ steps.docker.outputs.after }}"
+
+          CONTAINERD_REMOVED="${{ steps.containerd.outputs.removed }}"
+          CONTAINERD_BEFORE="${{ steps.containerd.outputs.before }}"
+          CONTAINERD_AFTER="${{ steps.containerd.outputs.after }}"
+
+          MESSAGE="🧹 *Limpieza de imágenes completada*
+
+          🐳 *Docker*
+          • Imágenes eliminadas: \`${DOCKER_IMAGES}\`
+          • Espacio liberado: \`${DOCKER_RECLAIMED}\`
+          • Antes: \`${DOCKER_BEFORE}\` → Después: \`${DOCKER_AFTER}\`
+
+          📦 *containerd (k3s)*
+          • Imágenes antes: \`${CONTAINERD_BEFORE}\`
+          • Imágenes eliminadas: \`${CONTAINERD_REMOVED}\`
+          • Imágenes después: \`${CONTAINERD_AFTER}\`"
+
+          curl -fsSL -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d parse_mode="Markdown" \
+            -d text="$MESSAGE"
