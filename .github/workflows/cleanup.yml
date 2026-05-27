@@ -23,7 +23,7 @@ jobs:
 
           AFTER=$(docker system df --format '{{json .}}' | jq -r 'select(.Type=="Images") | .Size' 2>/dev/null || echo "unknown")
           RECLAIMED=$(echo "$OUTPUT" | grep -i "Total reclaimed space" | awk '{print $NF}' || echo "0B")
-          IMAGES_REMOVED=$(echo "$OUTPUT" | grep -c "^Deleted:" || echo "0")
+          IMAGES_REMOVED=$(echo "$OUTPUT" | grep -c "^Deleted:" || true)
 
           echo "reclaimed=$RECLAIMED" >> "$GITHUB_OUTPUT"
           echo "images_removed=$IMAGES_REMOVED" >> "$GITHUB_OUTPUT"
