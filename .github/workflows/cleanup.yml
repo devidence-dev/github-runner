@@ -17,18 +17,18 @@ jobs:
       - name: 🐳 Prune Docker images
         id: docker
         run: |
-          BEFORE=$(docker system df --format '{{json .}}' | jq -r 'select(.Type=="Images") | .Size' 2>/dev/null || echo "unknown")
+          BEFORE_LIST=$(docker images -q 2>/dev/null | wc -l || true)
 
           OUTPUT=$(docker system prune -af 2>&1)
 
-          AFTER=$(docker system df --format '{{json .}}' | jq -r 'select(.Type=="Images") | .Size' 2>/dev/null || echo "unknown")
+          AFTER_LIST=$(docker images -q 2>/dev/null | wc -l || true)
           RECLAIMED=$(echo "$OUTPUT" | grep -i "Total reclaimed space" | awk '{print $NF}' || echo "0B")
           IMAGES_REMOVED=$(echo "$OUTPUT" | grep -c "^Deleted:" || true)
 
           echo "reclaimed=$RECLAIMED" >> "$GITHUB_OUTPUT"
           echo "images_removed=$IMAGES_REMOVED" >> "$GITHUB_OUTPUT"
-          echo "before=$BEFORE" >> "$GITHUB_OUTPUT"
-          echo "after=$AFTER" >> "$GITHUB_OUTPUT"
+          echo "before=$BEFORE_LIST" >> "$GITHUB_OUTPUT"
+          echo "after=$AFTER_LIST" >> "$GITHUB_OUTPUT"
 
       - name: 📦 Download crictl
         run: |
@@ -44,18 +44,35 @@ jobs:
         id: containerd
         run: |
           ENDPOINT="unix:///run/k3s/containerd/containerd.sock"
+          CRICTL="sudo /tmp/crictl --runtime-endpoint $ENDPOINT"
 
-          BEFORE_LIST=$(sudo /tmp/crictl --runtime-endpoint "$ENDPOINT" images -q 2>/dev/null | wc -l || echo "0")
+          BEFORE_LIST=$($CRICTL images -q 2>/dev/null | wc -l || true)
+          BEFORE_BYTES=$($CRICTL images -o json 2>/dev/null | jq '[.images[].size | tonumber] | add // 0' || echo "0")
 
-          OUTPUT=$(sudo /tmp/crictl --runtime-endpoint "$ENDPOINT" rmi --prune 2>&1)
+          $CRICTL rmi --prune 2>&1
 
-          AFTER_LIST=$(sudo /tmp/crictl --runtime-endpoint "$ENDPOINT" images -q 2>/dev/null | wc -l || echo "0")
+          AFTER_LIST=$($CRICTL images -q 2>/dev/null | wc -l || true)
+          AFTER_BYTES=$($CRICTL images -o json 2>/dev/null | jq '[.images[].size | tonumber] | add // 0' || echo "0")
+
           REMOVED=$(( BEFORE_LIST - AFTER_LIST ))
           [ "$REMOVED" -lt 0 ] && REMOVED=0
+
+          FREED_BYTES=$(( BEFORE_BYTES - AFTER_BYTES ))
+          [ "$FREED_BYTES" -lt 0 ] && FREED_BYTES=0
+          if [ "$FREED_BYTES" -ge 1073741824 ]; then
+            FREED_HUMAN=$(echo "scale=2; $FREED_BYTES / 1073741824" | bc)GB
+          elif [ "$FREED_BYTES" -ge 1048576 ]; then
+            FREED_HUMAN=$(echo "scale=2; $FREED_BYTES / 1048576" | bc)MB
+          elif [ "$FREED_BYTES" -ge 1024 ]; then
+            FREED_HUMAN=$(echo "scale=2; $FREED_BYTES / 1024" | bc)KB
+          else
+            FREED_HUMAN="${FREED_BYTES}B"
+          fi
 
           echo "removed=$REMOVED" >> "$GITHUB_OUTPUT"
           echo "before=$BEFORE_LIST" >> "$GITHUB_OUTPUT"
           echo "after=$AFTER_LIST" >> "$GITHUB_OUTPUT"
+          echo "reclaimed=$FREED_HUMAN" >> "$GITHUB_OUTPUT"
 
       - name: 📱 Notify Telegram
         if: always()
@@ -68,18 +85,21 @@ jobs:
           CONTAINERD_REMOVED="${{ steps.containerd.outputs.removed }}"
           CONTAINERD_BEFORE="${{ steps.containerd.outputs.before }}"
           CONTAINERD_AFTER="${{ steps.containerd.outputs.after }}"
+          CONTAINERD_RECLAIMED="${{ steps.containerd.outputs.reclaimed }}"
 
           MESSAGE="🧹 *Limpieza de imágenes completada*
 
           🐳 *Docker*
+          • Imágenes antes: \`${DOCKER_BEFORE}\`
           • Imágenes eliminadas: \`${DOCKER_IMAGES}\`
+          • Imágenes después: \`${DOCKER_AFTER}\`
           • Espacio liberado: \`${DOCKER_RECLAIMED}\`
-          • Antes: \`${DOCKER_BEFORE}\` → Después: \`${DOCKER_AFTER}\`
 
           📦 *containerd (k3s)*
           • Imágenes antes: \`${CONTAINERD_BEFORE}\`
           • Imágenes eliminadas: \`${CONTAINERD_REMOVED}\`
-          • Imágenes después: \`${CONTAINERD_AFTER}\`"
+          • Imágenes después: \`${CONTAINERD_AFTER}\`
+          • Espacio liberado: \`${CONTAINERD_RECLAIMED}\`"
 
           curl -fsSL -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
