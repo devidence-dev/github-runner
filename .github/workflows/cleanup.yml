@@ -17,13 +17,15 @@ jobs:
       - name: 🐳 Prune Docker images
         id: docker
         run: |
-          BEFORE_LIST=$(docker images -q 2>/dev/null | wc -l || true)
+          BEFORE_LIST=$(docker images -q 2>/dev/null | wc -l || echo "0")
 
-          OUTPUT=$(docker system prune -af 2>&1)
+          OUTPUT=$(docker system prune -af 2>&1 || true)
 
-          AFTER_LIST=$(docker images -q 2>/dev/null | wc -l || true)
-          RECLAIMED=$(echo "$OUTPUT" | grep -i "Total reclaimed space" | awk '{print $NF}' || echo "0B")
-          IMAGES_REMOVED=$(echo "$OUTPUT" | grep -c "^Deleted:" || true)
+          AFTER_LIST=$(docker images -q 2>/dev/null | wc -l || echo "0")
+          RECLAIMED=$(echo "$OUTPUT" | grep -i "Total reclaimed space" | sed 's/.*: //')
+          [ -z "$RECLAIMED" ] && RECLAIMED="0B"
+          IMAGES_REMOVED=$(echo "$OUTPUT" | grep -ci "^deleted:" || true)
+          [ -z "$IMAGES_REMOVED" ] && IMAGES_REMOVED="0"
 
           echo "reclaimed=$RECLAIMED" >> "$GITHUB_OUTPUT"
           echo "images_removed=$IMAGES_REMOVED" >> "$GITHUB_OUTPUT"
