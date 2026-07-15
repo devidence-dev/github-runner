@@ -1,12 +1,18 @@
-# Graph Report - .  (2026-07-14)
+# Graph Report - github-runner  (2026-07-14)
 
 ## Corpus Check
-- Corpus is ~3,791 words - fits in a single context window. You may not need a graph.
+- 5 files · ~3,793 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 43 nodes · 49 edges · 9 communities (7 shown, 2 thin omitted)
-- Extraction: 84% EXTRACTED · 16% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.81)
-- Token cost: 0 input · 59,546 output
+- 61 nodes · 65 edges · 12 communities (9 shown, 3 thin omitted)
+- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.81)
+- Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `f3fcc2e4`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Build & Deploy Pipeline
@@ -18,18 +24,21 @@
 - Graphify Meta Docs
 - Environment File Handling
 - Telegram Notifications
+- 🏃 GitHub Actions Self-Hosted Runner (Organization-Level)
+- 🚀 Quick start
+- CLAUDE.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `github-runner service` - 7 edges
-2. `build job (Build and push image)` - 5 edges
-3. `deploy job (Update homelab)` - 4 edges
-4. `image-container-reporter (icr) tool` - 4 edges
-5. `Dockerfile` - 4 edges
-6. `start.sh script` - 3 edges
-7. `Check Docker Updates & Notify Workflow` - 3 edges
-8. `Cleanup unused images Workflow` - 3 edges
-9. `cleanup job` - 3 edges
-10. `crictl tool (containerd CLI)` - 3 edges
+1. `🏃 GitHub Actions Self-Hosted Runner (Organization-Level)` - 7 edges
+2. `github-runner service` - 7 edges
+3. `🚀 Quick start` - 6 edges
+4. `build job (Build and push image)` - 5 edges
+5. `🔧 Troubleshooting` - 4 edges
+6. `deploy job (Update homelab)` - 4 edges
+7. `image-container-reporter (icr) tool` - 4 edges
+8. `Dockerfile` - 4 edges
+9. `start.sh script` - 3 edges
+10. `Check Docker Updates & Notify Workflow` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `github-runner service` --conceptually_related_to--> `Telegram update notification`  [INFERRED]
@@ -51,7 +60,7 @@
 - **Telegram Notification Integration** — _github_workflows_check_updates_telegram_notify, _github_workflows_cleanup_telegram_notify, docker_compose_github_runner_service, readme_telegram_notifications [INFERRED 0.75]
 - **RUNNER_VERSION Build Argument Flow** — docker_compose_runner_version_arg, _github_workflows_build_and_deploy_workflow, readme_dockerfile [INFERRED 0.85]
 
-## Communities (9 total, 2 thin omitted)
+## Communities (12 total, 3 thin omitted)
 
 ### Community 0 - "Build & Deploy Pipeline"
 Cohesion: 0.28
@@ -81,19 +90,27 @@ Nodes (3): GRAPH_REPORT.md, Graphify Knowledge Graph, graphify-out/wiki/index.md
 Cohesion: 0.67
 Nodes (3): .env file, .env.example, .gitignore
 
+### Community 9 - "🏃 GitHub Actions Self-Hosted Runner (Organization-Level)"
+Cohesion: 0.20
+Nodes (9): 📋 Behavior notes, Docker permission errors, 🏃 GitHub Actions Self-Hosted Runner (Organization-Level), 📦 Primary files, 🎯 Purpose, Runner doesn't register, 🔒 Security, Token issues (+1 more)
+
+### Community 10 - "🚀 Quick start"
+Cohesion: 0.33
+Nodes (6): 1️⃣ Copy and configure environment file, 2️⃣ Edit `.env` and set **required** variables:, 3️⃣ Example `.env` configuration:, 4️⃣ Build and run, ✅ Environment variables, 🚀 Quick start
+
 ## Knowledge Gaps
-- **11 isolated node(s):** `Zot Container Registry (zot.devidence.dev)`, `devidence-dev/homelab repository`, `HOMELAB_DEPLOY_TOKEN secret`, `GRAPH_REPORT.md`, `graphify-out/wiki/index.md` (+6 more)
+- **24 isolated node(s):** `graphify`, `🎯 Purpose`, `📦 Primary files`, `1️⃣ Copy and configure environment file`, `2️⃣ Edit `.env` and set **required** variables:` (+19 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `github-runner service` connect `Runner Service & Update Checks` to `Build & Deploy Pipeline`, `Image Cleanup & Pruning`, `Environment File Handling`?**
-  _High betweenness centrality (0.237) - this node is a cross-community bridge._
-- **Why does `Dockerfile` connect `Build & Deploy Pipeline` to `Runner Service & Update Checks`?**
-  _High betweenness centrality (0.087) - this node is a cross-community bridge._
+  _High betweenness centrality (0.115) - this node is a cross-community bridge._
+- **Why does `🏃 GitHub Actions Self-Hosted Runner (Organization-Level)` connect `🏃 GitHub Actions Self-Hosted Runner (Organization-Level)` to `🚀 Quick start`?**
+  _High betweenness centrality (0.047) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `github-runner service` (e.g. with `Telegram update notification` and `Telegram cleanup notification`) actually correct?**
   _`github-runner service` has 3 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Zot Container Registry (zot.devidence.dev)`, `devidence-dev/homelab repository`, `HOMELAB_DEPLOY_TOKEN secret` to the rest of the system?**
-  _11 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `graphify`, `🎯 Purpose`, `📦 Primary files` to the rest of the system?**
+  _24 weakly-connected nodes found - possible documentation gaps or missing edges._

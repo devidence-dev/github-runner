@@ -1,1 +1,14 @@
-{"0": "Build & Deploy Pipeline", "1": "Runner Service & Update Checks", "2": "Image Cleanup & Pruning", "3": "Runner Entrypoint Script", "4": "Package Version Checker", "5": "Runner Registration Config", "6": "Graphify Meta Docs", "7": "Environment File Handling", "8": "Telegram Notifications"}
+{
+  "0": "Build & Deploy Pipeline",
+  "1": "Runner Service & Update Checks",
+  "2": "Image Cleanup & Pruning",
+  "3": "Runner Entrypoint Script",
+  "4": "Package Version Checker",
+  "5": "Runner Registration Config",
+  "6": "Graphify Meta Docs",
+  "7": "Environment File Handling",
+  "8": "Telegram Notifications",
+  "9": "🏃 GitHub Actions Self-Hosted Runner (Organization-Level)",
+  "10": "🚀 Quick start",
+  "11": "CLAUDE.md"
+}

@@ -59,6 +59,7 @@
       "_origin": "ast",
       "id": "get_pkg_versions",
       "community": 4,
+      "community_name": "Package Version Checker",
       "norm_label": "get-pkg-versions.sh"
     },
     {
@@ -73,6 +74,7 @@
       "_origin": "ast",
       "id": "get_pkg_versions_sh__entry",
       "community": 4,
+      "community_name": "Package Version Checker",
       "norm_label": "get-pkg-versions.sh script"
     },
     {
@@ -87,6 +89,7 @@
       "_origin": "ast",
       "id": "get_pkg_versions_parse_section",
       "community": 4,
+      "community_name": "Package Version Checker",
       "norm_label": "parse_section()"
     },
     {
@@ -101,6 +104,7 @@
       "_origin": "ast",
       "id": "get_pkg_versions_query_versions",
       "community": 4,
+      "community_name": "Package Version Checker",
       "norm_label": "query_versions()"
     },
     {
@@ -115,6 +119,7 @@
       "_origin": "ast",
       "id": "start",
       "community": 3,
+      "community_name": "Runner Entrypoint Script",
       "norm_label": "start.sh"
     },
     {
@@ -129,6 +134,7 @@
       "_origin": "ast",
       "id": "start_sh__entry",
       "community": 3,
+      "community_name": "Runner Entrypoint Script",
       "norm_label": "start.sh script"
     },
     {
@@ -143,6 +149,7 @@
       "_origin": "ast",
       "id": "start_get_registration_token",
       "community": 3,
+      "community_name": "Runner Entrypoint Script",
       "norm_label": "get_registration_token()"
     },
     {
@@ -157,6 +164,7 @@
       "_origin": "ast",
       "id": "start_remove_existing_runner",
       "community": 3,
+      "community_name": "Runner Entrypoint Script",
       "norm_label": "remove_existing_runner()"
     },
     {
@@ -171,7 +179,206 @@
       "_origin": "ast",
       "id": "start_cleanup",
       "community": 3,
+      "community_name": "Runner Entrypoint Script",
       "norm_label": "cleanup()"
+    },
+    {
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "claude",
+      "community": 11,
+      "community_name": "CLAUDE.md",
+      "norm_label": "claude.md"
+    },
+    {
+      "label": "graphify",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "claude_graphify",
+      "community": 11,
+      "community_name": "CLAUDE.md",
+      "norm_label": "graphify"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme_github_actions_self_hosted_runner_organization_level",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "\ud83c\udfc3 github actions self-hosted runner (organization-level)"
+    },
+    {
+      "label": "\ud83c\udfaf Purpose",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "readme_purpose",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "\ud83c\udfaf purpose"
+    },
+    {
+      "label": "\ud83d\udce6 Primary files",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "readme_primary_files",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "\ud83d\udce6 primary files"
+    },
+    {
+      "label": "\ud83d\ude80 Quick start",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "readme_quick_start",
+      "community": 10,
+      "community_name": "\ud83d\ude80 Quick start",
+      "norm_label": "\ud83d\ude80 quick start"
+    },
+    {
+      "label": "1\ufe0f\u20e3 Copy and configure environment file",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "readme_1_copy_and_configure_environment_file",
+      "community": 10,
+      "community_name": "\ud83d\ude80 Quick start",
+      "norm_label": "1\ufe0f\u20e3 copy and configure environment file"
+    },
+    {
+      "label": "2\ufe0f\u20e3 Edit `.env` and set **required** variables:",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "readme_2_edit_env_and_set_required_variables",
+      "community": 10,
+      "community_name": "\ud83d\ude80 Quick start",
+      "norm_label": "2\ufe0f\u20e3 edit `.env` and set **required** variables:"
+    },
+    {
+      "label": "\u2705 Environment variables",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "readme_environment_variables",
+      "community": 10,
+      "community_name": "\ud83d\ude80 Quick start",
+      "norm_label": "\u2705 environment variables"
+    },
+    {
+      "label": "3\ufe0f\u20e3 Example `.env` configuration:",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "readme_3_example_env_configuration",
+      "community": 10,
+      "community_name": "\ud83d\ude80 Quick start",
+      "norm_label": "3\ufe0f\u20e3 example `.env` configuration:"
+    },
+    {
+      "label": "4\ufe0f\u20e3 Build and run",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "readme_4_build_and_run",
+      "community": 10,
+      "community_name": "\ud83d\ude80 Quick start",
+      "norm_label": "4\ufe0f\u20e3 build and run"
+    },
+    {
+      "label": "\ud83d\udccb Behavior notes",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L81",
+      "_origin": "ast",
+      "id": "readme_behavior_notes",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "\ud83d\udccb behavior notes"
+    },
+    {
+      "label": "\ud83d\udd12 Security",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L89",
+      "_origin": "ast",
+      "id": "readme_security",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "\ud83d\udd12 security"
+    },
+    {
+      "label": "\ud83d\udd27 Troubleshooting",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "readme_troubleshooting",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "\ud83d\udd27 troubleshooting"
+    },
+    {
+      "label": "Runner doesn't register",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L97",
+      "_origin": "ast",
+      "id": "readme_runner_doesn_t_register",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "runner doesn't register"
+    },
+    {
+      "label": "Docker permission errors",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L103",
+      "_origin": "ast",
+      "id": "readme_docker_permission_errors",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "docker permission errors"
+    },
+    {
+      "label": "Token issues",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L107",
+      "_origin": "ast",
+      "id": "readme_token_issues",
+      "community": 9,
+      "community_name": "\ud83c\udfc3 GitHub Actions Self-Hosted Runner (Organization-Level)",
+      "norm_label": "token issues"
     },
     {
       "label": "Build and Deploy Workflow",
@@ -182,9 +389,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_build_and_deploy_workflow",
       "community": 0,
-      "norm_label": "build and deploy workflow"
+      "norm_label": "build and deploy workflow",
+      "id": "_github_workflows_build_and_deploy_workflow",
+      "community_name": "Build & Deploy Pipeline"
     },
     {
       "label": "build job (Build and push image)",
@@ -195,9 +403,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_build_and_deploy_build",
       "community": 0,
-      "norm_label": "build job (build and push image)"
+      "norm_label": "build job (build and push image)",
+      "id": "_github_workflows_build_and_deploy_build",
+      "community_name": "Build & Deploy Pipeline"
     },
     {
       "label": "deploy job (Update homelab)",
@@ -208,9 +417,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_build_and_deploy_deploy",
       "community": 0,
-      "norm_label": "deploy job (update homelab)"
+      "norm_label": "deploy job (update homelab)",
+      "id": "_github_workflows_build_and_deploy_deploy",
+      "community_name": "Build & Deploy Pipeline"
     },
     {
       "label": "Zot Container Registry (zot.devidence.dev)",
@@ -221,9 +431,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_build_and_deploy_zot_registry",
       "community": 0,
-      "norm_label": "zot container registry (zot.devidence.dev)"
+      "norm_label": "zot container registry (zot.devidence.dev)",
+      "id": "_github_workflows_build_and_deploy_zot_registry",
+      "community_name": "Build & Deploy Pipeline"
     },
     {
       "label": "devidence-dev/homelab repository",
@@ -234,9 +445,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_build_and_deploy_homelab_repo",
       "community": 0,
-      "norm_label": "devidence-dev/homelab repository"
+      "norm_label": "devidence-dev/homelab repository",
+      "id": "_github_workflows_build_and_deploy_homelab_repo",
+      "community_name": "Build & Deploy Pipeline"
     },
     {
       "label": "HOMELAB_DEPLOY_TOKEN secret",
@@ -247,9 +459,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_build_and_deploy_homelab_deploy_token",
       "community": 0,
-      "norm_label": "homelab_deploy_token secret"
+      "norm_label": "homelab_deploy_token secret",
+      "id": "_github_workflows_build_and_deploy_homelab_deploy_token",
+      "community_name": "Build & Deploy Pipeline"
     },
     {
       "label": "Check Docker Updates & Notify Workflow",
@@ -260,9 +473,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_check_updates_workflow",
       "community": 1,
-      "norm_label": "check docker updates & notify workflow"
+      "norm_label": "check docker updates & notify workflow",
+      "id": "_github_workflows_check_updates_workflow",
+      "community_name": "Runner Service & Update Checks"
     },
     {
       "label": "check-updates job",
@@ -273,9 +487,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_check_updates_check_updates",
       "community": 1,
-      "norm_label": "check-updates job"
+      "norm_label": "check-updates job",
+      "id": "_github_workflows_check_updates_check_updates",
+      "community_name": "Runner Service & Update Checks"
     },
     {
       "label": "image-container-reporter (icr) tool",
@@ -286,9 +501,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_check_updates_image_container_reporter",
       "community": 1,
-      "norm_label": "image-container-reporter (icr) tool"
+      "norm_label": "image-container-reporter (icr) tool",
+      "id": "_github_workflows_check_updates_image_container_reporter",
+      "community_name": "Runner Service & Update Checks"
     },
     {
       "label": "Telegram update notification",
@@ -299,9 +515,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_check_updates_telegram_notify",
       "community": 1,
-      "norm_label": "telegram update notification"
+      "norm_label": "telegram update notification",
+      "id": "_github_workflows_check_updates_telegram_notify",
+      "community_name": "Runner Service & Update Checks"
     },
     {
       "label": "Kubernetes pod image scan",
@@ -312,9 +529,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_check_updates_kubernetes_scan",
       "community": 2,
-      "norm_label": "kubernetes pod image scan"
+      "norm_label": "kubernetes pod image scan",
+      "id": "_github_workflows_check_updates_kubernetes_scan",
+      "community_name": "Image Cleanup & Pruning"
     },
     {
       "label": "Cleanup unused images Workflow",
@@ -325,9 +543,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_cleanup_workflow",
       "community": 1,
-      "norm_label": "cleanup unused images workflow"
+      "norm_label": "cleanup unused images workflow",
+      "id": "_github_workflows_cleanup_workflow",
+      "community_name": "Runner Service & Update Checks"
     },
     {
       "label": "cleanup job",
@@ -338,9 +557,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_cleanup_cleanup",
       "community": 2,
-      "norm_label": "cleanup job"
+      "norm_label": "cleanup job",
+      "id": "_github_workflows_cleanup_cleanup",
+      "community_name": "Image Cleanup & Pruning"
     },
     {
       "label": "Prune Docker images step",
@@ -351,9 +571,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_cleanup_docker_prune",
       "community": 2,
-      "norm_label": "prune docker images step"
+      "norm_label": "prune docker images step",
+      "id": "_github_workflows_cleanup_docker_prune",
+      "community_name": "Image Cleanup & Pruning"
     },
     {
       "label": "crictl tool (containerd CLI)",
@@ -364,9 +585,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_cleanup_crictl",
       "community": 2,
-      "norm_label": "crictl tool (containerd cli)"
+      "norm_label": "crictl tool (containerd cli)",
+      "id": "_github_workflows_cleanup_crictl",
+      "community_name": "Image Cleanup & Pruning"
     },
     {
       "label": "Prune containerd images step",
@@ -377,9 +599,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_cleanup_containerd_prune",
       "community": 2,
-      "norm_label": "prune containerd images step"
+      "norm_label": "prune containerd images step",
+      "id": "_github_workflows_cleanup_containerd_prune",
+      "community_name": "Image Cleanup & Pruning"
     },
     {
       "label": "Telegram cleanup notification",
@@ -390,9 +613,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "_github_workflows_cleanup_telegram_notify",
       "community": 2,
-      "norm_label": "telegram cleanup notification"
+      "norm_label": "telegram cleanup notification",
+      "id": "_github_workflows_cleanup_telegram_notify",
+      "community_name": "Image Cleanup & Pruning"
     },
     {
       "label": "Graphify Knowledge Graph",
@@ -404,9 +628,10 @@
       "author": null,
       "contributor": null,
       "rationale": "Provides a scoped subgraph via graphify query/path/explain, usually much smaller than GRAPH_REPORT.md or raw grep output, for answering codebase questions.",
-      "id": "claude_graphify_knowledge_graph",
       "community": 6,
-      "norm_label": "graphify knowledge graph"
+      "norm_label": "graphify knowledge graph",
+      "id": "claude_graphify_knowledge_graph",
+      "community_name": "Graphify Meta Docs"
     },
     {
       "label": "GRAPH_REPORT.md",
@@ -417,9 +642,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_graph_report",
       "community": 6,
-      "norm_label": "graph_report.md"
+      "norm_label": "graph_report.md",
+      "id": "claude_graph_report",
+      "community_name": "Graphify Meta Docs"
     },
     {
       "label": "graphify-out/wiki/index.md",
@@ -430,9 +656,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_wiki_index",
       "community": 6,
-      "norm_label": "graphify-out/wiki/index.md"
+      "norm_label": "graphify-out/wiki/index.md",
+      "id": "claude_wiki_index",
+      "community_name": "Graphify Meta Docs"
     },
     {
       "label": "Dockerfile",
@@ -443,9 +670,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_dockerfile",
       "community": 0,
-      "norm_label": "dockerfile"
+      "norm_label": "dockerfile",
+      "id": "readme_dockerfile",
+      "community_name": "Build & Deploy Pipeline"
     },
     {
       "label": "start.sh (container entrypoint)",
@@ -456,9 +684,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_start_sh",
       "community": 5,
-      "norm_label": "start.sh (container entrypoint)"
+      "norm_label": "start.sh (container entrypoint)",
+      "id": "readme_start_sh",
+      "community_name": "Runner Registration Config"
     },
     {
       "label": ".env.example",
@@ -469,9 +698,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_env_example",
       "community": 7,
-      "norm_label": ".env.example"
+      "norm_label": ".env.example",
+      "id": "readme_env_example",
+      "community_name": "Environment File Handling"
     },
     {
       "label": ".gitignore",
@@ -482,9 +712,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_gitignore",
       "community": 7,
-      "norm_label": ".gitignore"
+      "norm_label": ".gitignore",
+      "id": "readme_gitignore",
+      "community_name": "Environment File Handling"
     },
     {
       "label": "Organization-level runner registration",
@@ -496,9 +727,10 @@
       "author": null,
       "contributor": null,
       "rationale": "Runner registers at the org level (not tied to a single repository) so any repository in the GitHub organization can use it, via /orgs/{org}/actions/runners/registration-token.",
-      "id": "readme_org_level_runner",
       "community": 5,
-      "norm_label": "organization-level runner registration"
+      "norm_label": "organization-level runner registration",
+      "id": "readme_org_level_runner",
+      "community_name": "Runner Registration Config"
     },
     {
       "label": "GH_TOKEN (admin:org scope)",
@@ -509,9 +741,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_gh_token",
       "community": 5,
-      "norm_label": "gh_token (admin:org scope)"
+      "norm_label": "gh_token (admin:org scope)",
+      "id": "readme_gh_token",
+      "community_name": "Runner Registration Config"
     },
     {
       "label": "GH_OWNER (organization name)",
@@ -522,9 +755,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_gh_owner",
       "community": 5,
-      "norm_label": "gh_owner (organization name)"
+      "norm_label": "gh_owner (organization name)",
+      "id": "readme_gh_owner",
+      "community_name": "Runner Registration Config"
     },
     {
       "label": "Telegram notifications config (optional env vars)",
@@ -535,9 +769,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_telegram_notifications",
       "community": 8,
-      "norm_label": "telegram notifications config (optional env vars)"
+      "norm_label": "telegram notifications config (optional env vars)",
+      "id": "readme_telegram_notifications",
+      "community_name": "Telegram Notifications"
     },
     {
       "label": "github-runner service",
@@ -548,9 +783,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "docker_compose_github_runner_service",
       "community": 1,
-      "norm_label": "github-runner service"
+      "norm_label": "github-runner service",
+      "id": "docker_compose_github_runner_service",
+      "community_name": "Runner Service & Update Checks"
     },
     {
       "label": "RUNNER_VERSION build argument",
@@ -561,9 +797,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "docker_compose_runner_version_arg",
       "community": 0,
-      "norm_label": "runner_version build argument"
+      "norm_label": "runner_version build argument",
+      "id": "docker_compose_runner_version_arg",
+      "community_name": "Build & Deploy Pipeline"
     },
     {
       "label": "extra-images.yml volume mount (/opt/runner/extra-images.yml)",
@@ -574,9 +811,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "docker_compose_extra_images_volume",
       "community": 1,
-      "norm_label": "extra-images.yml volume mount (/opt/runner/extra-images.yml)"
+      "norm_label": "extra-images.yml volume mount (/opt/runner/extra-images.yml)",
+      "id": "docker_compose_extra_images_volume",
+      "community_name": "Runner Service & Update Checks"
     },
     {
       "label": ".env file",
@@ -587,9 +825,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "docker_compose_env_file",
       "community": 7,
-      "norm_label": ".env file"
+      "norm_label": ".env file",
+      "id": "docker_compose_env_file",
+      "community_name": "Environment File Handling"
     },
     {
       "label": "Build-stage dependencies (curl, tar, gzip, ca-certificates)",
@@ -600,9 +839,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "packages_build_deps",
       "community": 0,
-      "norm_label": "build-stage dependencies (curl, tar, gzip, ca-certificates)"
+      "norm_label": "build-stage dependencies (curl, tar, gzip, ca-certificates)",
+      "id": "packages_build_deps",
+      "community_name": "Build & Deploy Pipeline"
     },
     {
       "label": "Runtime dependencies (curl, jq, git, docker.io, docker-compose, sudo, python3, ...)",
@@ -613,9 +853,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "packages_runtime_deps",
       "community": 1,
-      "norm_label": "runtime dependencies (curl, jq, git, docker.io, docker-compose, sudo, python3, ...)"
+      "norm_label": "runtime dependencies (curl, jq, git, docker.io, docker-compose, sudo, python3, ...)",
+      "id": "packages_runtime_deps",
+      "community_name": "Runner Service & Update Checks"
     }
   ],
   "links": [
@@ -730,6 +971,182 @@
       "_origin": "ast",
       "source": "start_sh__entry",
       "target": "start_remove_existing_runner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "claude",
+      "target": "claude_graphify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme",
+      "target": "readme_github_actions_self_hosted_runner_organization_level",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_github_actions_self_hosted_runner_organization_level",
+      "target": "readme_behavior_notes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_github_actions_self_hosted_runner_organization_level",
+      "target": "readme_primary_files",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_github_actions_self_hosted_runner_organization_level",
+      "target": "readme_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_github_actions_self_hosted_runner_organization_level",
+      "target": "readme_quick_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_github_actions_self_hosted_runner_organization_level",
+      "target": "readme_security",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_github_actions_self_hosted_runner_organization_level",
+      "target": "readme_troubleshooting",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_quick_start",
+      "target": "readme_1_copy_and_configure_environment_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_quick_start",
+      "target": "readme_2_edit_env_and_set_required_variables",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_quick_start",
+      "target": "readme_3_example_env_configuration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_quick_start",
+      "target": "readme_4_build_and_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_quick_start",
+      "target": "readme_environment_variables",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_troubleshooting",
+      "target": "readme_docker_permission_errors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_troubleshooting",
+      "target": "readme_runner_doesn_t_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_troubleshooting",
+      "target": "readme_token_issues",
       "confidence_score": 1.0
     },
     {
@@ -1166,5 +1583,5 @@
       "source_file": "docker-compose.yml"
     }
   ],
-  "built_at_commit": "51f4e831a5a53fd7ef6d3dd93cbc8b913d7e5ce2"
+  "built_at_commit": "f3fcc2e4272495c367451fa9c9d56c919776471e"
 }

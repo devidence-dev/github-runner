@@ -20,6 +20,4 @@ runtime:
   - python3-venv
   - openssh-client
   - gnupg
-  # - docker-compose
-  # - docker.io
 

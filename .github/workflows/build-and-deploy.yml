@@ -49,7 +49,7 @@ jobs:
             kubernetes/infrastructure/github-runner/values.yaml
           git config user.email "ci@devidence.dev"
           git config user.name "homelab-ci"
-          git add kubernetes/apps/github-runner/values.yaml
+          git add kubernetes/infrastructure/github-runner/values.yaml
           git commit -m "chore(github-runner): bump image to ${{ needs.build.outputs.image_tag }}"
           git push
           rm -rf /tmp/homelab-runner-deploy
