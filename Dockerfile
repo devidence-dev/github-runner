@@ -1,10 +1,10 @@
-FROM debian:13.5-slim AS builder
+FROM debian:13.6-slim AS builder
 
-ARG RUNNER_VERSION=2.333.1
+ARG RUNNER_VERSION=2.335.1
 ARG TARGETPLATFORM
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl=8.14.1-2+deb13u3 \
+    curl=8.14.1-2+deb13u4 \
     tar=1.35+dfsg-3.1 \
     gzip=1.13-1 \
     ca-certificates=20250419 \
@@ -24,7 +24,7 @@ RUN set -e && \
     rm "./actions-runner-linux-${RUNNER_ARCH}-${RUNNER_VERSION}.tar.gz"
 
 
-FROM debian:13.5-slim
+FROM debian:13.6-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -32,15 +32,17 @@ ARG TARGETPLATFORM
 
 # Install runtime dependencies with pinned versions for reproducibility
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl=8.14.1-2+deb13u3 \
+    curl=8.14.1-2+deb13u4 \
     jq=1.7.1-6+deb13u2 \
     file=1:5.46-5 \
     git=1:2.47.3-0+deb13u1 \
+    docker.io=26.1.5+dfsg1-9+b13 \
+    docker-compose=2.26.1-4 \
     sudo=1.9.16p2-3+deb13u2 \
     ca-certificates=20250419 \
     libicu76=76.1-4 \
     libc6=2.41-12+deb13u3 \
-    libssl3t64=3.5.6-1~deb13u1 \
+    libssl3t64=3.5.6-1~deb13u2 \
     unzip=6.0-29 \
     python3=3.13.5-1 \
     python3-pip=25.1.1+dfsg-1 \

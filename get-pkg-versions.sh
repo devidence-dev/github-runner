@@ -7,7 +7,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PACKAGES_FILE="${SCRIPT_DIR}/packages.yml"
-IMAGE="debian:13.5-slim"
+IMAGE="debian:13.6-slim"
 
 if [ ! -f "$PACKAGES_FILE" ]; then
     echo "Error: packages.yml not found at ${PACKAGES_FILE}" >&2

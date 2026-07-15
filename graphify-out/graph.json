@@ -1,0 +1,1170 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "self_hosted_runner_pipeline",
+        "label": "Self-hosted Runner CI/CD Pipelines",
+        "nodes": [
+          "_github_workflows_build_and_deploy_workflow",
+          "_github_workflows_check_updates_workflow",
+          "_github_workflows_cleanup_workflow",
+          "docker_compose_github_runner_service"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "docker-compose.yml"
+      },
+      {
+        "id": "telegram_notification_integration",
+        "label": "Telegram Notification Integration",
+        "nodes": [
+          "_github_workflows_check_updates_telegram_notify",
+          "_github_workflows_cleanup_telegram_notify",
+          "docker_compose_github_runner_service",
+          "readme_telegram_notifications"
+        ],
+        "relation": "form",
+        "confidence": "INFERRED",
+        "confidence_score": 0.75,
+        "source_file": "README.md"
+      },
+      {
+        "id": "runner_version_build_arg_flow",
+        "label": "RUNNER_VERSION Build Argument Flow",
+        "nodes": [
+          "docker_compose_runner_version_arg",
+          "_github_workflows_build_and_deploy_workflow",
+          "readme_dockerfile"
+        ],
+        "relation": "form",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "docker-compose.yml"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "get-pkg-versions.sh",
+      "file_type": "code",
+      "source_file": "get-pkg-versions.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "get_pkg_versions",
+      "community": 4,
+      "norm_label": "get-pkg-versions.sh"
+    },
+    {
+      "label": "get-pkg-versions.sh script",
+      "file_type": "code",
+      "source_file": "get-pkg-versions.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "get_pkg_versions_sh__entry",
+      "community": 4,
+      "norm_label": "get-pkg-versions.sh script"
+    },
+    {
+      "label": "parse_section()",
+      "file_type": "code",
+      "source_file": "get-pkg-versions.sh",
+      "source_location": "L18",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "_origin": "ast",
+      "id": "get_pkg_versions_parse_section",
+      "community": 4,
+      "norm_label": "parse_section()"
+    },
+    {
+      "label": "query_versions()",
+      "file_type": "code",
+      "source_file": "get-pkg-versions.sh",
+      "source_location": "L44",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "_origin": "ast",
+      "id": "get_pkg_versions_query_versions",
+      "community": 4,
+      "norm_label": "query_versions()"
+    },
+    {
+      "label": "start.sh",
+      "file_type": "code",
+      "source_file": "start.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "start",
+      "community": 3,
+      "norm_label": "start.sh"
+    },
+    {
+      "label": "start.sh script",
+      "file_type": "code",
+      "source_file": "start.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "start_sh__entry",
+      "community": 3,
+      "norm_label": "start.sh script"
+    },
+    {
+      "label": "get_registration_token()",
+      "file_type": "code",
+      "source_file": "start.sh",
+      "source_location": "L55",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "_origin": "ast",
+      "id": "start_get_registration_token",
+      "community": 3,
+      "norm_label": "get_registration_token()"
+    },
+    {
+      "label": "remove_existing_runner()",
+      "file_type": "code",
+      "source_file": "start.sh",
+      "source_location": "L143",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "_origin": "ast",
+      "id": "start_remove_existing_runner",
+      "community": 3,
+      "norm_label": "remove_existing_runner()"
+    },
+    {
+      "label": "cleanup()",
+      "file_type": "code",
+      "source_file": "start.sh",
+      "source_location": "L192",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "_origin": "ast",
+      "id": "start_cleanup",
+      "community": 3,
+      "norm_label": "cleanup()"
+    },
+    {
+      "label": "Build and Deploy Workflow",
+      "file_type": "code",
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_build_and_deploy_workflow",
+      "community": 0,
+      "norm_label": "build and deploy workflow"
+    },
+    {
+      "label": "build job (Build and push image)",
+      "file_type": "code",
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_build_and_deploy_build",
+      "community": 0,
+      "norm_label": "build job (build and push image)"
+    },
+    {
+      "label": "deploy job (Update homelab)",
+      "file_type": "code",
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_build_and_deploy_deploy",
+      "community": 0,
+      "norm_label": "deploy job (update homelab)"
+    },
+    {
+      "label": "Zot Container Registry (zot.devidence.dev)",
+      "file_type": "concept",
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_build_and_deploy_zot_registry",
+      "community": 0,
+      "norm_label": "zot container registry (zot.devidence.dev)"
+    },
+    {
+      "label": "devidence-dev/homelab repository",
+      "file_type": "concept",
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_build_and_deploy_homelab_repo",
+      "community": 0,
+      "norm_label": "devidence-dev/homelab repository"
+    },
+    {
+      "label": "HOMELAB_DEPLOY_TOKEN secret",
+      "file_type": "concept",
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_build_and_deploy_homelab_deploy_token",
+      "community": 0,
+      "norm_label": "homelab_deploy_token secret"
+    },
+    {
+      "label": "Check Docker Updates & Notify Workflow",
+      "file_type": "code",
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_check_updates_workflow",
+      "community": 1,
+      "norm_label": "check docker updates & notify workflow"
+    },
+    {
+      "label": "check-updates job",
+      "file_type": "code",
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_check_updates_check_updates",
+      "community": 1,
+      "norm_label": "check-updates job"
+    },
+    {
+      "label": "image-container-reporter (icr) tool",
+      "file_type": "concept",
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_check_updates_image_container_reporter",
+      "community": 1,
+      "norm_label": "image-container-reporter (icr) tool"
+    },
+    {
+      "label": "Telegram update notification",
+      "file_type": "concept",
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_check_updates_telegram_notify",
+      "community": 1,
+      "norm_label": "telegram update notification"
+    },
+    {
+      "label": "Kubernetes pod image scan",
+      "file_type": "concept",
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_check_updates_kubernetes_scan",
+      "community": 2,
+      "norm_label": "kubernetes pod image scan"
+    },
+    {
+      "label": "Cleanup unused images Workflow",
+      "file_type": "code",
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_cleanup_workflow",
+      "community": 1,
+      "norm_label": "cleanup unused images workflow"
+    },
+    {
+      "label": "cleanup job",
+      "file_type": "code",
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_cleanup_cleanup",
+      "community": 2,
+      "norm_label": "cleanup job"
+    },
+    {
+      "label": "Prune Docker images step",
+      "file_type": "code",
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_cleanup_docker_prune",
+      "community": 2,
+      "norm_label": "prune docker images step"
+    },
+    {
+      "label": "crictl tool (containerd CLI)",
+      "file_type": "concept",
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_cleanup_crictl",
+      "community": 2,
+      "norm_label": "crictl tool (containerd cli)"
+    },
+    {
+      "label": "Prune containerd images step",
+      "file_type": "code",
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_cleanup_containerd_prune",
+      "community": 2,
+      "norm_label": "prune containerd images step"
+    },
+    {
+      "label": "Telegram cleanup notification",
+      "file_type": "concept",
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "_github_workflows_cleanup_telegram_notify",
+      "community": 2,
+      "norm_label": "telegram cleanup notification"
+    },
+    {
+      "label": "Graphify Knowledge Graph",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Provides a scoped subgraph via graphify query/path/explain, usually much smaller than GRAPH_REPORT.md or raw grep output, for answering codebase questions.",
+      "id": "claude_graphify_knowledge_graph",
+      "community": 6,
+      "norm_label": "graphify knowledge graph"
+    },
+    {
+      "label": "GRAPH_REPORT.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_graph_report",
+      "community": 6,
+      "norm_label": "graph_report.md"
+    },
+    {
+      "label": "graphify-out/wiki/index.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_wiki_index",
+      "community": 6,
+      "norm_label": "graphify-out/wiki/index.md"
+    },
+    {
+      "label": "Dockerfile",
+      "file_type": "code",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_dockerfile",
+      "community": 0,
+      "norm_label": "dockerfile"
+    },
+    {
+      "label": "start.sh (container entrypoint)",
+      "file_type": "code",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_start_sh",
+      "community": 5,
+      "norm_label": "start.sh (container entrypoint)"
+    },
+    {
+      "label": ".env.example",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_env_example",
+      "community": 7,
+      "norm_label": ".env.example"
+    },
+    {
+      "label": ".gitignore",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_gitignore",
+      "community": 7,
+      "norm_label": ".gitignore"
+    },
+    {
+      "label": "Organization-level runner registration",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Runner registers at the org level (not tied to a single repository) so any repository in the GitHub organization can use it, via /orgs/{org}/actions/runners/registration-token.",
+      "id": "readme_org_level_runner",
+      "community": 5,
+      "norm_label": "organization-level runner registration"
+    },
+    {
+      "label": "GH_TOKEN (admin:org scope)",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_gh_token",
+      "community": 5,
+      "norm_label": "gh_token (admin:org scope)"
+    },
+    {
+      "label": "GH_OWNER (organization name)",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_gh_owner",
+      "community": 5,
+      "norm_label": "gh_owner (organization name)"
+    },
+    {
+      "label": "Telegram notifications config (optional env vars)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_telegram_notifications",
+      "community": 8,
+      "norm_label": "telegram notifications config (optional env vars)"
+    },
+    {
+      "label": "github-runner service",
+      "file_type": "code",
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "docker_compose_github_runner_service",
+      "community": 1,
+      "norm_label": "github-runner service"
+    },
+    {
+      "label": "RUNNER_VERSION build argument",
+      "file_type": "code",
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "docker_compose_runner_version_arg",
+      "community": 0,
+      "norm_label": "runner_version build argument"
+    },
+    {
+      "label": "extra-images.yml volume mount (/opt/runner/extra-images.yml)",
+      "file_type": "code",
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "docker_compose_extra_images_volume",
+      "community": 1,
+      "norm_label": "extra-images.yml volume mount (/opt/runner/extra-images.yml)"
+    },
+    {
+      "label": ".env file",
+      "file_type": "document",
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "docker_compose_env_file",
+      "community": 7,
+      "norm_label": ".env file"
+    },
+    {
+      "label": "Build-stage dependencies (curl, tar, gzip, ca-certificates)",
+      "file_type": "code",
+      "source_file": "packages.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "packages_build_deps",
+      "community": 0,
+      "norm_label": "build-stage dependencies (curl, tar, gzip, ca-certificates)"
+    },
+    {
+      "label": "Runtime dependencies (curl, jq, git, docker.io, docker-compose, sudo, python3, ...)",
+      "file_type": "code",
+      "source_file": "packages.yml",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "packages_runtime_deps",
+      "community": 1,
+      "norm_label": "runtime dependencies (curl, jq, git, docker.io, docker-compose, sudo, python3, ...)"
+    }
+  ],
+  "links": [
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "get-pkg-versions.sh",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "get_pkg_versions",
+      "target": "get_pkg_versions_parse_section",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "get-pkg-versions.sh",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "get_pkg_versions",
+      "target": "get_pkg_versions_query_versions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "get-pkg-versions.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "get_pkg_versions",
+      "target": "get_pkg_versions_sh__entry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "get-pkg-versions.sh",
+      "source_location": "L73",
+      "weight": 1.0,
+      "context": "call",
+      "_origin": "ast",
+      "source": "get_pkg_versions_sh__entry",
+      "target": "get_pkg_versions_query_versions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "start.sh",
+      "source_location": "L192",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "start",
+      "target": "start_cleanup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "start.sh",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "start",
+      "target": "start_get_registration_token",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "start.sh",
+      "source_location": "L143",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "start",
+      "target": "start_remove_existing_runner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "start.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "start",
+      "target": "start_sh__entry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "start.sh",
+      "source_location": "L352",
+      "weight": 1.0,
+      "context": "call",
+      "_origin": "ast",
+      "source": "start_sh__entry",
+      "target": "start_cleanup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "start.sh",
+      "source_location": "L297",
+      "weight": 1.0,
+      "context": "call",
+      "_origin": "ast",
+      "source": "start_sh__entry",
+      "target": "start_remove_existing_runner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_build_and_deploy_workflow",
+      "target": "_github_workflows_build_and_deploy_build"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_build_and_deploy_workflow",
+      "target": "_github_workflows_build_and_deploy_deploy"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_build_and_deploy_build",
+      "target": "_github_workflows_build_and_deploy_zot_registry"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_build_and_deploy_build",
+      "target": "readme_dockerfile"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_build_and_deploy_deploy",
+      "target": "_github_workflows_build_and_deploy_build"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "docker_compose_runner_version_arg",
+      "target": "_github_workflows_build_and_deploy_build"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_build_and_deploy_deploy",
+      "target": "_github_workflows_build_and_deploy_homelab_deploy_token"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/build-and-deploy.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_build_and_deploy_deploy",
+      "target": "_github_workflows_build_and_deploy_homelab_repo"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_check_updates_workflow",
+      "target": "_github_workflows_check_updates_check_updates"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_check_updates_workflow",
+      "target": "_github_workflows_cleanup_workflow"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "packages.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "packages_runtime_deps",
+      "target": "_github_workflows_check_updates_workflow"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_check_updates_check_updates",
+      "target": "_github_workflows_check_updates_image_container_reporter"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_check_updates_image_container_reporter",
+      "target": "_github_workflows_check_updates_kubernetes_scan"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_check_updates_image_container_reporter",
+      "target": "_github_workflows_check_updates_telegram_notify"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/check-updates.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_check_updates_image_container_reporter",
+      "target": "docker_compose_extra_images_volume"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "docker_compose_github_runner_service",
+      "target": "_github_workflows_check_updates_telegram_notify"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_cleanup_crictl",
+      "target": "_github_workflows_check_updates_kubernetes_scan"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_cleanup_workflow",
+      "target": "_github_workflows_cleanup_cleanup"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "packages.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "packages_runtime_deps",
+      "target": "_github_workflows_cleanup_workflow"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_cleanup_cleanup",
+      "target": "_github_workflows_cleanup_crictl"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_cleanup_cleanup",
+      "target": "_github_workflows_cleanup_docker_prune"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_cleanup_docker_prune",
+      "target": "_github_workflows_cleanup_telegram_notify"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_cleanup_crictl",
+      "target": "_github_workflows_cleanup_containerd_prune"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".github/workflows/cleanup.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "_github_workflows_cleanup_containerd_prune",
+      "target": "_github_workflows_cleanup_telegram_notify"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "docker_compose_github_runner_service",
+      "target": "_github_workflows_cleanup_telegram_notify"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_graphify_knowledge_graph",
+      "target": "claude_graph_report"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_graphify_knowledge_graph",
+      "target": "claude_wiki_index"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "docker_compose_github_runner_service",
+      "target": "readme_dockerfile"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "packages.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "packages_build_deps",
+      "target": "readme_dockerfile"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_dockerfile",
+      "target": "docker_compose_runner_version_arg"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_start_sh",
+      "target": "readme_org_level_runner"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_env_example",
+      "target": "docker_compose_env_file"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_gitignore",
+      "target": "readme_env_example"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_org_level_runner",
+      "target": "readme_gh_owner"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_org_level_runner",
+      "target": "readme_gh_token"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "docker_compose_github_runner_service",
+      "target": "docker_compose_env_file"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "docker_compose_github_runner_service",
+      "target": "docker_compose_extra_images_volume"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docker-compose.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "docker_compose_github_runner_service",
+      "target": "docker_compose_runner_version_arg"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "packages.yml",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "packages_runtime_deps",
+      "target": "docker_compose_github_runner_service"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "self_hosted_runner_pipeline",
+      "label": "Self-hosted Runner CI/CD Pipelines",
+      "nodes": [
+        "_github_workflows_build_and_deploy_workflow",
+        "_github_workflows_check_updates_workflow",
+        "_github_workflows_cleanup_workflow",
+        "docker_compose_github_runner_service"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docker-compose.yml"
+    },
+    {
+      "id": "telegram_notification_integration",
+      "label": "Telegram Notification Integration",
+      "nodes": [
+        "_github_workflows_check_updates_telegram_notify",
+        "_github_workflows_cleanup_telegram_notify",
+        "docker_compose_github_runner_service",
+        "readme_telegram_notifications"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "README.md"
+    },
+    {
+      "id": "runner_version_build_arg_flow",
+      "label": "RUNNER_VERSION Build Argument Flow",
+      "nodes": [
+        "docker_compose_runner_version_arg",
+        "_github_workflows_build_and_deploy_workflow",
+        "readme_dockerfile"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docker-compose.yml"
+    }
+  ],
+  "built_at_commit": "51f4e831a5a53fd7ef6d3dd93cbc8b913d7e5ce2"
+}

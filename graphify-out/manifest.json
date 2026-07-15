@@ -1,0 +1,52 @@
+{
+  ".claude/settings.json": {
+    "mtime": 1784082733.8798492,
+    "ast_hash": "42172d66e9fc2e2c0b3a82f154949e7e",
+    "semantic_hash": "42172d66e9fc2e2c0b3a82f154949e7e"
+  },
+  "get-pkg-versions.sh": {
+    "mtime": 1784082925.131278,
+    "ast_hash": "3eb73e4ee0b3a8c921efec3c23f4fbd5",
+    "semantic_hash": "3eb73e4ee0b3a8c921efec3c23f4fbd5"
+  },
+  "start.sh": {
+    "mtime": 1779825663.2362754,
+    "ast_hash": "a36285544af7503d545f24689cd7081f",
+    "semantic_hash": "a36285544af7503d545f24689cd7081f"
+  },
+  ".github/workflows/build-and-deploy.yml": {
+    "mtime": 1779857789.6582441,
+    "ast_hash": "cb2689ffedd9aa9c4264d0037271cd25",
+    "semantic_hash": "cb2689ffedd9aa9c4264d0037271cd25"
+  },
+  ".github/workflows/check-updates.yml": {
+    "mtime": 1779837348.0704107,
+    "ast_hash": "93564085f061fd9e186e01a67ec85006",
+    "semantic_hash": "93564085f061fd9e186e01a67ec85006"
+  },
+  ".github/workflows/cleanup.yml": {
+    "mtime": 1780608292.4844992,
+    "ast_hash": "eb2c4a1e978a23692e25ede3155379c0",
+    "semantic_hash": "eb2c4a1e978a23692e25ede3155379c0"
+  },
+  "CLAUDE.md": {
+    "mtime": 1784082712.8092337,
+    "ast_hash": "82efb97a359f5c7290bf2513d14686be",
+    "semantic_hash": "82efb97a359f5c7290bf2513d14686be"
+  },
+  "README.md": {
+    "mtime": 1764895924.881099,
+    "ast_hash": "c693f0f29adb8f73d827a7edc81faa17",
+    "semantic_hash": "c693f0f29adb8f73d827a7edc81faa17"
+  },
+  "docker-compose.yml": {
+    "mtime": 1779309875.3974974,
+    "ast_hash": "8fa00863461646d06c64a0d5f84430ac",
+    "semantic_hash": "8fa00863461646d06c64a0d5f84430ac"
+  },
+  "packages.yml": {
+    "mtime": 1779828388.357998,
+    "ast_hash": "83582913baf24d6f8d3c95f1428cce6a",
+    "semantic_hash": "83582913baf24d6f8d3c95f1428cce6a"
+  }
+}
