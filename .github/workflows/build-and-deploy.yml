@@ -12,25 +12,39 @@ jobs:
   build:
     name: Build and push image
     runs-on: self-hosted
+    permissions:
+      contents: read
+      id-token: write # required so this job can request a GitHub OIDC token for Infisical
     outputs:
       image_tag: ${{ inputs.runner_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Login to Zot
-        run: docker login zot.devidence.dev -u "$ZOT_USERNAME" -p "$ZOT_PASSWORD"
+      - name: Fetch GHCR_TOKEN from Infisical
+        uses: Infisical/secrets-action@77ab1f4ccd183a543cb5b42435fbd181189f4995 # v1.0.16
+        with:
+          method: "oidc"
+          identity-id: "77942652-da93-4daa-9f33-62534699496b"
+          domain: "https://app.infisical.com"
+          project-slug: "homelab-devidence"
+          env-slug: "prod"
+          secret-path: "/cross"
+          export-type: "env"
+
+      - name: Login to ghcr.io
+        run: docker login ghcr.io -u ${{ github.actor }} -p "$GHCR_TOKEN"
 
       - name: Build image
         run: |
           docker build \
             --build-arg RUNNER_VERSION=${{ inputs.runner_version }} \
             -f Dockerfile \
-            -t zot.devidence.dev/github-runner:${{ inputs.runner_version }} \
+            -t ghcr.io/devidence-dev/github-runner:${{ inputs.runner_version }} \
             .
 
-      - name: Push to Zot
-        run: docker push zot.devidence.dev/github-runner:${{ inputs.runner_version }}
+      - name: Push to GHCR
+        run: docker push ghcr.io/devidence-dev/github-runner:${{ inputs.runner_version }}
 
   deploy:
     name: Update homelab
