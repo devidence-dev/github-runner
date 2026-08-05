@@ -4,9 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       runner_version:
-        description: "GitHub Actions Runner CLI version (e.g. 2.334.0)"
+        description: "GitHub Actions Runner CLI version (e.g. 2.335.1)"
         required: true
-        default: "2.334.0"
+        default: "2.335.1"
+
+concurrency:
+  group: github-runner-host-operations
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -33,7 +37,7 @@ jobs:
           export-type: "env"
 
       - name: Login to ghcr.io
-        run: docker login ghcr.io -u ${{ github.actor }} -p "$GHCR_TOKEN"
+        run: printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "${{ github.actor }}" --password-stdin
 
       - name: Build image
         run: |
@@ -56,14 +60,29 @@ jobs:
         env:
           HOMELAB_DEPLOY_TOKEN: ${{ secrets.HOMELAB_DEPLOY_TOKEN }}
         run: |
-          rm -rf /tmp/homelab-runner-deploy
-          git clone https://x-access-token:${HOMELAB_DEPLOY_TOKEN}@github.com/devidence-dev/homelab.git /tmp/homelab-runner-deploy
-          cd /tmp/homelab-runner-deploy
+          set -euo pipefail
+          DEPLOY_DIR=$(mktemp -d /tmp/homelab-runner-deploy.XXXXXX)
+          GIT_ASKPASS_SCRIPT=$(mktemp /tmp/homelab-runner-askpass.XXXXXX)
+          cleanup() { rm -rf "$DEPLOY_DIR" "$GIT_ASKPASS_SCRIPT"; }
+          trap cleanup EXIT
+          printf '%s\n' \
+            '#!/bin/sh' \
+            'case "$1" in' \
+            '*Username*) printf "%s\\n" "x-access-token" ;;' \
+            '*Password*) printf "%s\\n" "$HOMELAB_DEPLOY_TOKEN" ;;' \
+            'esac' > "$GIT_ASKPASS_SCRIPT"
+          chmod 700 "$GIT_ASKPASS_SCRIPT"
+          export GIT_ASKPASS="$GIT_ASKPASS_SCRIPT" GIT_TERMINAL_PROMPT=0
+          git clone https://github.com/devidence-dev/homelab.git "$DEPLOY_DIR"
+          cd "$DEPLOY_DIR"
           sed -i "s|tag: .*|tag: \"${{ needs.build.outputs.image_tag }}\"|" \
             kubernetes/infrastructure/github-runner/values.yaml
           git config user.email "ci@devidence.dev"
           git config user.name "homelab-ci"
           git add kubernetes/infrastructure/github-runner/values.yaml
+          if git diff --cached --quiet; then
+            echo "La etiqueta ya está actualizada; no hay cambios que desplegar."
+            exit 0
+          fi
           git commit -m "chore(github-runner): bump image to ${{ needs.build.outputs.image_tag }}"
           git push
-          rm -rf /tmp/homelab-runner-deploy

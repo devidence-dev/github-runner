@@ -17,10 +17,6 @@ on:
         type: boolean
         default: false
 
-env:
-  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-
 jobs:
   check-updates:
     runs-on: self-hosted
@@ -30,6 +26,8 @@ jobs:
     steps:
       - name: 📦 Download Docker Image Reporter
         run: |
+          set -euo pipefail
+          ICR_VERSION="v0.9.3"
           ARCH=$(uname -m)
           echo "🖥️ Arquitectura detectada: $ARCH"
 
@@ -40,8 +38,13 @@ jobs:
           esac
 
           echo "📥 Descargando a /tmp (evitando restricción noexec)..."
-          curl -L -f --retry 3 -o /tmp/icr \
-            "https://github.com/devidence-dev/image-container-reporter/releases/latest/download/icr-linux-${BINARY_ARCH}"
+          BASE_URL="https://github.com/devidence-dev/image-container-reporter/releases/download/${ICR_VERSION}"
+          curl -fsSL --retry 3 -o /tmp/icr \
+            "${BASE_URL}/icr-linux-${BINARY_ARCH}"
+          curl -fsSL --retry 3 -o /tmp/icr.sha256 \
+            "${BASE_URL}/icr-linux-${BINARY_ARCH}.sha256"
+          EXPECTED_SHA256=$(awk '{print $1}' /tmp/icr.sha256)
+          printf '%s  %s\n' "$EXPECTED_SHA256" /tmp/icr | sha256sum -c -
 
           chmod +x /tmp/icr
 
@@ -58,7 +61,10 @@ jobs:
       - name: 🔍 Scan running Kubernetes pods for updates
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
+          set -euo pipefail
           if [ -n "${TELEGRAM_BOT_TOKEN}" ] && [ -n "${TELEGRAM_CHAT_ID}" ]; then
             echo "📱 Configurando Telegram..."
             /tmp/icr config set telegram.bot_token "${TELEGRAM_BOT_TOKEN}"

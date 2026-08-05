@@ -18,11 +18,9 @@ echo "🔍 Checking environment variables..."
 echo "   GH_OWNER: ${GH_OWNER:-'❌ Not configured'}"
 echo "   RUNNER_NAME: ${RUNNER_NAME:-'❌ Not configured'}"
 
-# DEBUG: Check token without printing full contents
+# Confirm secret availability without exposing any part of a credential in logs.
 if [[ -n "$GH_TOKEN" ]]; then
-    token_length=${#GH_TOKEN}
-    token_preview="${GH_TOKEN:0:8}...${GH_TOKEN: -4}"
-    echo "   GH_TOKEN: ✅ Configured (${token_length} chars): ${token_preview}"
+    echo "   GH_TOKEN: ✅ Configured"
 else
     echo "   GH_TOKEN: ❌ Not configured"
 fi
@@ -131,9 +129,7 @@ get_registration_token() {
         return 1
     fi
 
-    echo "✅ Registration token obtained and cleaned successfully" >&2
-    echo "🔑 Token (preview): ${token:0:8}...${token: -4}" >&2
-    echo "📏 Token length: ${#token} characters" >&2
+    echo "✅ Registration token obtained successfully" >&2
 
     # ONLY output the cleaned token to stdout (no extra printf)
     echo "$token"
@@ -290,9 +286,6 @@ if [[ -z "$REG_TOKEN" ]]; then
     exit 1
 fi
 
-echo "🔐 Final token for configuration (preview): ${REG_TOKEN:0:8}...${REG_TOKEN: -4}"
-echo "📏 Final token length: ${#REG_TOKEN} characters"
-
 # Try to remove existing runner from GitHub API before configuring
 remove_existing_runner "${RUNNER_NAME}"
 
@@ -304,24 +297,32 @@ if [[ -n "$RUNNER_GROUP" ]]; then
     echo "� Runner Group: ${RUNNER_GROUP}"
 fi
 
-# Build config.sh command with optional runner group
-CONFIG_CMD="timeout 300 ./config.sh --unattended --replace --url https://github.com/${GH_OWNER} --token ${REG_TOKEN} --name ${RUNNER_NAME}"
+# Build config.sh arguments as an array. This preserves values containing spaces
+# and avoids executing configuration values as shell code.
+CONFIG_CMD=(
+    timeout 300 ./config.sh --unattended --replace
+    --url "https://github.com/${GH_OWNER}"
+    --token "${REG_TOKEN}"
+    --name "${RUNNER_NAME}"
+)
 
 if [[ -n "$RUNNER_GROUP" ]]; then
-    CONFIG_CMD="$CONFIG_CMD --runnergroup ${RUNNER_GROUP}"
+    CONFIG_CMD+=(--runnergroup "${RUNNER_GROUP}")
 fi
 
 if [[ -n "$RUNNER_LABELS" ]]; then
-    CONFIG_CMD="$CONFIG_CMD --labels ${RUNNER_LABELS}"
+    CONFIG_CMD+=(--labels "${RUNNER_LABELS}")
 fi
 
-CONFIG_CMD="$CONFIG_CMD --work _work"
+CONFIG_CMD+=(--work _work)
 
 # Run configuration with timeout and capture full output
 echo "🔧 Running config.sh..."
-eval "$CONFIG_CMD" 2>&1 | tee /tmp/config.log
+set +e
+"${CONFIG_CMD[@]}" 2>&1 | tee /tmp/config.log
 
 config_exit_code=${PIPESTATUS[0]}
+set -e
 
 # Check configuration result
 if [[ $config_exit_code -eq 124 ]]; then

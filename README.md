@@ -14,6 +14,9 @@ This repository packages a containerized GitHub Actions self-hosted runner that 
 - `.env.example` — Example environment variables
 - `.gitignore` — Prevents committing secrets and build artifacts
 
+The runner image includes the Docker CLI, Docker Compose, and Buildx. This makes
+plain `docker build` use BuildKit instead of Docker's deprecated legacy builder.
+
 ## 🚀 Quick start
 
 ### 1️⃣ Copy and configure environment file
@@ -38,6 +41,7 @@ cp .env.example .env
 **Optional:**
 - `RUNNER_NAME` — Friendly name for the runner (default: `raspi-runner-<timestamp>`)
 - `RUNNER_DATA` — Path to persist runner data (default: `./runner-data`)
+- `RUNNER_LABELS` — Comma-separated labels for capability-based job routing (for example, `privileged,homelab`)
 - `REGISTRATION_TOKEN` — Manual registration token (if automatic retrieval fails)
 - `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — For optional notifications
 
@@ -72,6 +76,17 @@ docker-compose up -d
 docker-compose logs -f github-runner
 ```
 
+### Update an existing runner image
+
+After changing the Docker tooling in this repository, rebuild the image and
+recreate the runner container so jobs receive the new Buildx plugin:
+
+```bash
+docker compose build --no-cache github-runner
+docker compose up -d --force-recreate github-runner
+docker compose exec github-runner docker buildx version
+```
+
 You should see:
 ```
 ✅ Runner configured successfully
@@ -84,13 +99,23 @@ You should see:
 - `start.sh` automatically obtains a registration token using `GH_TOKEN`
 - The runner will be available to **all repositories** in your organization
 - If automatic token retrieval fails, you can set `REGISTRATION_TOKEN` manually in `.env`
-- Runner version can be customized at build time: `docker build --build-arg RUNNER_VERSION=2.329.0 .`
+- Runner version can be customized at build time: `docker build --build-arg RUNNER_VERSION=2.335.1 .`
 
 ## 🔒 Security
 
 - **Never commit** `.env` or tokens to the repository (`.gitignore` prevents this)
 - Use a token with minimal required scope: `admin:org` for organization runners
 - The runner runs in an isolated Docker container with controlled access
+
+### Privileged runner access
+
+This runner intentionally mounts the Docker and Incus sockets so it can build
+images and manage the homelab. Access to either socket effectively grants
+control of the host. Keep this runner in a dedicated GitHub runner group and,
+in the organization settings, allow that group only for trusted repositories.
+Use a separate runner without host sockets for untrusted pull requests or
+general CI. Workflows that require this runner should select its dedicated
+labels, for example: `runs-on: [self-hosted, privileged, homelab]`.
 
 ## 🔧 Troubleshooting
 
@@ -102,7 +127,7 @@ You should see:
 
 ### Docker permission errors
 - Ensure the host user can access Docker socket
-- Verify the container runs with appropriate privileges (privileged: true in docker-compose.yml)
+- Verify the mounted Docker socket's group ID matches the `docker` group in the runner image
 
 ### Token issues
 - Generate a new token at: GitHub → Settings → Developer settings → Personal access tokens

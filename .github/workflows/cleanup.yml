@@ -5,9 +5,9 @@ on:
     - cron: '0 8 */3 * *'  # Every 3 days at 3:00 AM GMT-5
   workflow_dispatch:
 
-env:
-  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+concurrency:
+  group: github-runner-host-operations
+  cancel-in-progress: false
 
 jobs:
   cleanup:
@@ -17,9 +17,10 @@ jobs:
       - name: 🐳 Prune Docker images
         id: docker
         run: |
+          set -euo pipefail
           BEFORE_LIST=$(docker images -q 2>/dev/null | wc -l || echo "0")
 
-          OUTPUT=$(docker system prune -af 2>&1 || true)
+          OUTPUT=$(docker system prune -af 2>&1)
 
           AFTER_LIST=$(docker images -q 2>/dev/null | wc -l || echo "0")
           RECLAIMED=$(echo "$OUTPUT" | grep -i "Total reclaimed space" | sed 's/.*: //')
@@ -34,17 +35,23 @@ jobs:
 
       - name: 📦 Download crictl
         run: |
+          set -euo pipefail
           CRICTL_VERSION="v1.32.0"
           ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
-          curl -fsSL -o /tmp/crictl.tar.gz \
-            "https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz"
+          BASE_URL="https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}"
+          ARCHIVE="crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz"
+          curl -fsSL -o /tmp/crictl.tar.gz "${BASE_URL}/${ARCHIVE}"
+          curl -fsSL -o /tmp/crictl.tar.gz.sha256 "${BASE_URL}/${ARCHIVE}.sha256"
+          EXPECTED_SHA256=$(awk '{print $1}' /tmp/crictl.tar.gz.sha256)
+          printf '%s  %s\n' "$EXPECTED_SHA256" /tmp/crictl.tar.gz | sha256sum -c -
           tar -xzf /tmp/crictl.tar.gz -C /tmp
           chmod +x /tmp/crictl
-          rm /tmp/crictl.tar.gz
+          rm /tmp/crictl.tar.gz /tmp/crictl.tar.gz.sha256
 
       - name: 🔧 Prune containerd images
         id: containerd
         run: |
+          set -euo pipefail
           ENDPOINT="unix:///run/k3s/containerd/containerd.sock"
           CRICTL="sudo /tmp/crictl --runtime-endpoint $ENDPOINT"
 
@@ -78,7 +85,15 @@ jobs:
 
       - name: 📱 Notify Telegram
         if: always()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
+          set -euo pipefail
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "Telegram no está configurado; se omite la notificación."
+            exit 0
+          fi
           DOCKER_RECLAIMED="${{ steps.docker.outputs.reclaimed }}"
           DOCKER_IMAGES="${{ steps.docker.outputs.images_removed }}"
           DOCKER_BEFORE="${{ steps.docker.outputs.before }}"

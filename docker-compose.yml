@@ -4,9 +4,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        RUNNER_VERSION: ${RUNNER_VERSION:-2.329.0}
+        RUNNER_VERSION: ${RUNNER_VERSION:-2.335.1}
         # SONAR_SCANNER_VERSION: ${SONAR_SCANNER_VERSION:-7.3.0.5189}
-    image: ghcr.io/actions/actions-runner:${RUNNER_VERSION:-2.329.0}
+    image: ghcr.io/actions/actions-runner:${RUNNER_VERSION:-2.335.1}
     container_name: github-actions-runner
     env_file:
       - .env
@@ -15,6 +15,7 @@ services:
       - GH_TOKEN=${GH_TOKEN}
       - RUNNER_NAME=${RUNNER_NAME:-runner-${HOSTNAME}}
       - RUNNER_GROUP=${RUNNER_GROUP:-Default}
+      - RUNNER_LABELS=${RUNNER_LABELS:-}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
     volumes:
