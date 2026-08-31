@@ -91,7 +91,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
-            echo "Telegram no está configurado; se omite la notificación."
+            echo "Telegram is not configured; skipping notification."
             exit 0
           fi
           DOCKER_RECLAIMED="${{ steps.docker.outputs.reclaimed }}"
@@ -104,19 +104,19 @@ jobs:
           CONTAINERD_AFTER="${{ steps.containerd.outputs.after }}"
           CONTAINERD_RECLAIMED="${{ steps.containerd.outputs.reclaimed }}"
 
-          MESSAGE="🧹 *Limpieza de imágenes completada*
+          MESSAGE="🧹 *Image cleanup completed*
 
           🐳 *Docker*
-          • Imágenes antes: \`${DOCKER_BEFORE}\`
-          • Imágenes eliminadas: \`${DOCKER_IMAGES}\`
-          • Imágenes después: \`${DOCKER_AFTER}\`
-          • Espacio liberado: \`${DOCKER_RECLAIMED}\`
+          • Images before: \`${DOCKER_BEFORE}\`
+          • Images removed: \`${DOCKER_IMAGES}\`
+          • Images after: \`${DOCKER_AFTER}\`
+          • Space reclaimed: \`${DOCKER_RECLAIMED}\`
 
           📦 *containerd (k3s)*
-          • Imágenes antes: \`${CONTAINERD_BEFORE}\`
-          • Imágenes eliminadas: \`${CONTAINERD_REMOVED}\`
-          • Imágenes después: \`${CONTAINERD_AFTER}\`
-          • Espacio liberado: \`${CONTAINERD_RECLAIMED}\`"
+          • Images before: \`${CONTAINERD_BEFORE}\`
+          • Images removed: \`${CONTAINERD_REMOVED}\`
+          • Images after: \`${CONTAINERD_AFTER}\`
+          • Space reclaimed: \`${CONTAINERD_RECLAIMED}\`"
 
           curl -fsSL -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \

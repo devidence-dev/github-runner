@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: 🚀 Build and Deploy
 
 on:
   workflow_dispatch:
@@ -14,13 +14,14 @@ concurrency:
 
 jobs:
   build:
-    name: Build and push image
+    name: 🏗️ Build and push image
     runs-on: self-hosted
     permissions:
       contents: read
       id-token: write # required so this job can request a GitHub OIDC token for Infisical
     outputs:
       image_tag: ${{ inputs.runner_version }}
+      digest: ${{ steps.digest.outputs.digest }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -50,8 +51,14 @@ jobs:
       - name: Push to GHCR
         run: docker push ghcr.io/devidence-dev/github-runner:${{ inputs.runner_version }}
 
+      - name: Resolve pushed image digest
+        id: digest
+        run: |
+          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "ghcr.io/devidence-dev/github-runner:${{ inputs.runner_version }}" | cut -d'@' -f2)
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+
   deploy:
-    name: Update homelab
+    name: 🚀 Update homelab
     needs: build
     runs-on: self-hosted
     environment: production
@@ -75,13 +82,17 @@ jobs:
           export GIT_ASKPASS="$GIT_ASKPASS_SCRIPT" GIT_TERMINAL_PROMPT=0
           git clone https://github.com/devidence-dev/homelab.git "$DEPLOY_DIR"
           cd "$DEPLOY_DIR"
-          sed -i "s|tag: .*|tag: \"${{ needs.build.outputs.image_tag }}\"|" \
-            kubernetes/infrastructure/github-runner/values.yaml
+          VALUES=kubernetes/infrastructure/github-runner/values.yaml
+          sed -i "s|tag: .*|tag: \"${{ needs.build.outputs.image_tag }}\"|" "$VALUES"
+          # Written on every build: if re-run with the same runner_version (only the
+          # Dockerfile base image changed, not the runner version), the tag stays the same
+          # but the digest doesn't — that's what gives ArgoCD a real diff to sync.
+          sed -i "s|digest: .*|digest: \"${{ needs.build.outputs.digest }}\"|" "$VALUES"
           git config user.email "ci@devidence.dev"
           git config user.name "homelab-ci"
-          git add kubernetes/infrastructure/github-runner/values.yaml
+          git add "$VALUES"
           if git diff --cached --quiet; then
-            echo "La etiqueta ya está actualizada; no hay cambios que desplegar."
+            echo "Tag is already up to date; nothing to deploy."
             exit 0
           fi
           git commit -m "chore(github-runner): bump image to ${{ needs.build.outputs.image_tag }}"

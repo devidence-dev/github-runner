@@ -2,17 +2,17 @@ name: 🔍 Check Docker Updates & Notify
 
 on:
   schedule:
-    # Ejecutar cada 2 días a las 8:00 AM local (GMT-5, equivalente a 13:00 UTC)
+    # Run every 2 days at 8:00 AM local time (GMT-5, equivalent to 13:00 UTC)
     - cron: '0 13 */2 * *'
   workflow_dispatch:
     inputs:
       force_check:
-        description: "🔄 Forzar verificación completa"
+        description: "🔄 Force full check"
         required: false
         type: boolean
         default: false
       debug_mode:
-        description: "🔧 Modo debug (más información)"
+        description: "🔧 Debug mode (more information)"
         required: false
         type: boolean
         default: false
@@ -29,15 +29,15 @@ jobs:
           set -euo pipefail
           ICR_VERSION="v0.9.3"
           ARCH=$(uname -m)
-          echo "🖥️ Arquitectura detectada: $ARCH"
+          echo "🖥️ Detected architecture: $ARCH"
 
           case $ARCH in
             "aarch64"|"arm64") BINARY_ARCH="arm64" ;;
             "x86_64"|"amd64") BINARY_ARCH="amd64" ;;
-            *) echo "⚠️ Arquitectura no reconocida"; exit 1 ;;
+            *) echo "⚠️ Unrecognized architecture"; exit 1 ;;
           esac
 
-          echo "📥 Descargando a /tmp (evitando restricción noexec)..."
+          echo "📥 Downloading to /tmp (avoiding noexec restriction)..."
           BASE_URL="https://github.com/devidence-dev/image-container-reporter/releases/download/${ICR_VERSION}"
           curl -fsSL --retry 3 -o /tmp/icr \
             "${BASE_URL}/icr-linux-${BINARY_ARCH}"
@@ -48,13 +48,13 @@ jobs:
 
           chmod +x /tmp/icr
 
-          echo "🔍 Verificando:"
+          echo "🔍 Verifying:"
           file /tmp/icr
 
           if /tmp/icr --version; then
-            echo "✅ Scanner listo en /tmp/icr"
+            echo "✅ Scanner ready at /tmp/icr"
           else
-            echo "❌ Error al ejecutar"
+            echo "❌ Error running scanner"
             exit 1
           fi
 
@@ -66,18 +66,18 @@ jobs:
         run: |
           set -euo pipefail
           if [ -n "${TELEGRAM_BOT_TOKEN}" ] && [ -n "${TELEGRAM_CHAT_ID}" ]; then
-            echo "📱 Configurando Telegram..."
+            echo "📱 Configuring Telegram..."
             /tmp/icr config set telegram.bot_token "${TELEGRAM_BOT_TOKEN}"
             /tmp/icr config set telegram.chat_id "${TELEGRAM_CHAT_ID}"
             /tmp/icr config set telegram.enabled true
           fi
 
           if [ -n "${GITHUB_TOKEN}" ]; then
-            echo "🔑 Configurando GitHub token para GHCR..."
+            echo "🔑 Configuring GitHub token for GHCR..."
             /tmp/icr config set registry.ghcr.token "${GITHUB_TOKEN}"
           fi
 
-          echo "🔍 Iniciando scan de pods en Kubernetes..."
+          echo "🔍 Starting pod scan on Kubernetes..."
           if [ -n "${TELEGRAM_BOT_TOKEN}" ]; then
             /tmp/icr scan \
               --kubernetes \
@@ -96,65 +96,65 @@ jobs:
           cp /tmp/scan-results.json ./scan-results.json
           chmod 644 ./scan-results.json
 
-          echo "✅ Scan completado"
+          echo "✅ Scan completed"
 
       - name: 📊 Show detailed scan summary
         run: |
           if [ -f "scan-results.json" ]; then
-            echo "📋 Resumen detallado del scan de contenedores:"
+            echo "📋 Detailed container scan summary:"
             echo "========================================"
 
             if command -v jq >/dev/null 2>&1; then
-              echo "🔍 Estructura del JSON:"
-              jq 'keys' scan-results.json 2>/dev/null || echo "Error leyendo claves JSON"
+              echo "🔍 JSON structure:"
+              jq 'keys' scan-results.json 2>/dev/null || echo "Error reading JSON keys"
 
               UPDATES_COUNT=$(jq -r 'if has("updates_available") then .updates_available | length else 0 end' scan-results.json 2>/dev/null || echo '0')
               UP_TO_DATE_COUNT=$(jq -r 'if has("up_to_date_services") then .up_to_date_services | length elif has("up_to_date") then .up_to_date | length else 0 end' scan-results.json 2>/dev/null || echo '0')
               TOTAL_CONTAINERS=$(jq -r 'if has("total_services_found") then .total_services_found elif has("services_scanned") then .services_scanned else 0 end' scan-results.json 2>/dev/null || echo '0')
               ERRORS_COUNT=$(jq -r 'if has("errors") then .errors | length else 0 end' scan-results.json 2>/dev/null || echo '0')
 
-              echo "🔄 Actualizaciones encontradas: $UPDATES_COUNT"
-              echo "✅ Contenedores actualizados: $UP_TO_DATE_COUNT"
-              echo "🐳 Total contenedores escaneados: $TOTAL_CONTAINERS"
-              echo "❌ Errores encontrados: $ERRORS_COUNT"
+              echo "🔄 Updates found: $UPDATES_COUNT"
+              echo "✅ Up-to-date containers: $UP_TO_DATE_COUNT"
+              echo "🐳 Total containers scanned: $TOTAL_CONTAINERS"
+              echo "❌ Errors found: $ERRORS_COUNT"
               echo ""
 
               if [ "$UPDATES_COUNT" -gt 0 ]; then
-                echo "🔄 ACTUALIZACIONES DISPONIBLES:"
+                echo "🔄 UPDATES AVAILABLE:"
                 echo "------------------------------"
-                jq -r '.updates_available[] | "  📦 \(.service_name): \(.current_image.tag) → \(.latest_image.tag) (\(.update_type))"' scan-results.json 2>/dev/null || echo "Error procesando actualizaciones"
+                jq -r '.updates_available[] | "  📦 \(.service_name): \(.current_image.tag) → \(.latest_image.tag) (\(.update_type))"' scan-results.json 2>/dev/null || echo "Error processing updates"
                 echo ""
               fi
 
               if [ "$UP_TO_DATE_COUNT" -gt 0 ]; then
-                echo "✅ SERVICIOS ACTUALIZADOS:"
+                echo "✅ UP-TO-DATE SERVICES:"
                 echo "-------------------------"
-                jq -r '.up_to_date_services[] | "  ✓ \(.)"' scan-results.json 2>/dev/null || echo "Error procesando servicios actualizados"
+                jq -r '.up_to_date_services[] | "  ✓ \(.)"' scan-results.json 2>/dev/null || echo "Error processing up-to-date services"
                 echo ""
               fi
 
               if [ "$ERRORS_COUNT" -gt 0 ]; then
-                echo "❌ ERRORES ENCONTRADOS:"
+                echo "❌ ERRORS FOUND:"
                 echo "----------------------"
-                jq -r '.errors[] | "  ⚠️ \(.)"' scan-results.json 2>/dev/null || echo "Error procesando errores"
+                jq -r '.errors[] | "  ⚠️ \(.)"' scan-results.json 2>/dev/null || echo "Error processing errors"
                 echo ""
               fi
 
             else
-              echo "⚠️ jq no disponible - mostrando contenido raw del JSON:"
+              echo "⚠️ jq not available - showing raw JSON content:"
               cat scan-results.json
             fi
 
             if [ "${{ github.event.inputs.debug_mode }}" = "true" ]; then
               echo ""
-              echo "🔧 DEBUG MODE - JSON Completo:"
+              echo "🔧 DEBUG MODE - Full JSON:"
               echo "============================="
               cat scan-results.json | jq '.' 2>/dev/null || cat scan-results.json
             fi
 
           else
-            echo "❌ No se encontró archivo scan-results.json"
-            echo "📂 Archivos en directorio actual:"
+            echo "❌ scan-results.json file not found"
+            echo "📂 Files in current directory:"
             ls -la
             exit 1
           fi
