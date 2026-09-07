@@ -101,6 +101,14 @@ You should see:
 - If automatic token retrieval fails, you can set `REGISTRATION_TOKEN` manually in `.env`
 - Runner version can be customized at build time: `docker build --build-arg RUNNER_VERSION=2.335.1 .`
 
+## 🔁 CI/CD
+
+This repo has no `.github/workflows/` of its own. The build/deploy pipeline and the host
+maintenance cronjobs (Docker/containerd image updates check, image pruning) live in
+[`devidence-dev/workflows`](https://github.com/devidence-dev/workflows) as
+`ops-github-runner-*.yml` — special-cased there as plain workflows (not `workflow_call`) since
+they operate this one host, not something other repos invoke.
+
 ## 🔒 Security
 
 - **Never commit** `.env` or tokens to the repository (`.gitignore` prevents this)
