@@ -1,6 +1,5 @@
 # Ignore environment files containing secrets
 .env
-extra-images.yml
 
 # Docker artifacts
 /runner-data/
@@ -26,8 +25,6 @@ tmp/
 
 # Ignore built images or artifacts
 *.tar.gz
-
-extra-images.yml
 
 # graphify: cache y config local, no aportan a otros clones
 graphify-out/cache/
