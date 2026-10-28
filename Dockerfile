@@ -1,6 +1,6 @@
 FROM debian:13.7-slim AS builder
 
-ARG RUNNER_VERSION=2.338.1
+ARG RUNNER_VERSION=2.338.2
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl=8.14.1-2+deb13u7 \
